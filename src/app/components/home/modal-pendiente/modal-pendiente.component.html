@@ -1,0 +1,25 @@
+<h1 mat-dialog-title>Cambio de oro de pendiente a inventario</h1>
+<form #f="ngForm" (submit)="confirmarOro()">
+  <div mat-dialog-content>
+    <div class="row">
+      <div>
+        <p><a class="color-primary" (click)="setValorMaximo()" style="cursor: pointer"> (Oro pendiente: {{goldTable.pendiente}}K) - Dame click ;)</a></p>
+        <mat-form-field class="w-100" appearance="fill">
+          <mat-label>Cantidad de oro en movimiento</mat-label>
+          <input type="number" autocomplete="off" onfocus="this.select()" matInput [formControl]="formOro" required>
+        </mat-form-field>
+        <mat-error *ngIf="!formOro.valid && formOro.touched">
+          Por favor, ingresa un valor válido
+        </mat-error>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <a mat-button (click)="cerrarModal()">Volver</a>
+    <button mat-button type="submit" cdkFocusInitial> Guardar</button>
+  </div>
+</form>
+
+<div class="background-spinner" *ngIf="cargando">
+  <mat-spinner diameter="60"></mat-spinner>
+</div>

@@ -1,0 +1,47 @@
+<div class="card recent-sales">
+  <div class="card-body">
+    <div class="container-flex">
+      <div class="row">
+        <div class="col-6">
+          <h2 class="card-title mt-2 my-auto pt-2">Inventario de Oro</h2>
+        </div>
+        <div class="col-6 my-auto d-flex justify-content-end" >
+          <h5 class="card-title mb-0 py-auto mx-2">Agregar Movimiento </h5>
+          <button mat-mini-fab color="primary" class="my-auto" (click)="openDialog()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="dataTable-container dataTable-hover pb-3">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z2 tableGoldTables w-100" matSortStart="desc" matSortActive="reino" matSortDirection="asc" matSort multiTemplateDataRows>
+        <ng-container matColumnDef="reino">
+          <th mat-header-cell *matHeaderCellDef class="borde-derecha" mat-sort-header class="col-3 ps-4 borde-derecha"> Server </th>
+          <td mat-cell *matCellDef="let element" class="borde-derecha" style="text-align: center;"><div class="col"><a (click)="copiarPersonaje(element)" style="cursor: pointer" class="text-primary"> {{element.reinoString}} </a></div></td>
+          <td mat-footer-cell *matFooterCellDef class="borde-derecha" style="text-align: center;"> Total </td>
+        </ng-container>
+        <ng-container matColumnDef="inventario" >
+          <th mat-header-cell *matHeaderCellDef class="borde-derecha" mat-sort-header class="col-3 ps-4 borde-derecha"> Inventario </th>
+          <td mat-cell *matCellDef="let element" class="t-number borde-derecha"><div class="col-8 align-items-center"> {{element.inventario}}K </div> </td>
+          <td mat-footer-cell *matFooterCellDef class="t-number borde-derecha"><div class="col-8 align-items-center">{{getSumaInventario()}}K</div></td>
+        </ng-container>
+        <ng-container matColumnDef="pendiente">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-3 ps-4 borde-derecha"> Pendiente </th>
+          <td mat-cell *matCellDef="let element" class="t-number borde-derecha"><div class="col-8 align-items-center"> <a (click)="openModalPendiente(element)" style="cursor: pointer" class="text-primary">{{element.pendiente}}K</a></div> </td>
+          <td mat-footer-cell *matFooterCellDef class="t-number borde-derecha"><div class="col-8 align-items-center">{{getSumaPendiente()}}K</div></td>
+        </ng-container>
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-3 ps-4"> Total </th>
+          <td mat-cell *matCellDef="let element" class="t-number"><div class="col-8 align-items-center"> {{element.total}}K</div> </td>
+          <td mat-footer-cell *matFooterCellDef class="t-number"><div class="col-8 align-items-center">{{getSumaTotal()}}K</div></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
+        <tr class="tablerow" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+
+      </table>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,87 @@
+table {
+  width: 100%;
+}
+
+.dataTable-hover .tablerow:hover {
+  background: whitesmoke;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+tr.example-detail-row {
+  height: 0;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+.dataTable-hover .tablerow:hover {
+  background: whitesmoke;
+}
+
+.mat-header-cell{
+  font-size: 0.8vw;
+  font-weight: 900;
+  color: #3f51b5;
+}
+
+td.t-number{
+  text-align: right;
+}
+
+td.mat-cell{
+  font-size: 0.8vw;
+}
+
+td.mat-footer-cell{
+  font-weight: 900;
+  font-size: 0.8vw;
+  color: black;
+}
+
+tr.mat-row{
+  height: 406x
+}
+
+tr.mat-header-row {
+  background-color: whitesmoke;
+  height: 46px;
+}
+
+tr.mat-footer-row {
+  background-color: whitesmoke;
+  height: 46px;
+}
+
+.borde-derecha{
+  border-right: 0.5px solid;
+  border-color: #e2e2e2;
+}
+
+th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+  padding-left: 0px !important;
+}
+
+th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+  padding-right: 0px !important;
+}
+
+.mat-icon{
+  height: auto;
+  width: auto;
+  vertical-align: sub;
+  font-size: 1.3vw;
+}
+
+.badge{
+  font-size: 1.2em;
+  font-weight: 500;
+}
+
+.badge span{
+  vertical-align: text-top;
+}

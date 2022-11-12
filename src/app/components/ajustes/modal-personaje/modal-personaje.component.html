@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>Personaje de {{data!.reino!.nombre}}</h1>
+<form #f="ngForm" (submit)="confirmarNombre()">
+  <div mat-dialog-content>
+    <div class="row">
+      <div>
+        <mat-form-field class="w-100" appearance="fill">
+          <mat-label>Nombre del personaje</mat-label>
+          <input [required]="false" type="text" autocomplete="off" onfocus="this.select()" matInput [formControl]="formNombre" required>
+        </mat-form-field>
+        <mat-error *ngIf="!formNombre.valid && formNombre.touched">
+          Por favor, ingresa un valor válido
+        </mat-error>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <a mat-button (click)="cerrarModal()">Volver</a>
+    <button mat-button type="submit" cdkFocusInitial> Guardar</button>
+  </div>
+</form>
+
+<div class="background-spinner" *ngIf="cargando">
+  <mat-spinner diameter="60"></mat-spinner>
+</div>

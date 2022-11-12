@@ -1,0 +1,74 @@
+<main id="main" class="main ">
+  <div class="pagetitle">
+    <h1>Ajustes</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="home">Home</a></li>
+        <li class="breadcrumb-item active">Ajustes</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <section class="section">
+    <div class="row">
+      <div class="col-6">
+        <div class="card">
+          <div class="card-body form-group">
+            <h5 class="card-title">Selección de reinos</h5>
+            <!-- General Form Elements -->
+            <form (submit)="guardarReinos()" class="mb-3" style="text-align: -webkit-center;">
+              <table style="width:90%;" mat-table [dataSource]="dataSource" class="mat-elevation-z8 tableMovimientos" matSortActive="reinoString" matSortDirection="desc" matSort multiTemplateDataRows>
+                <ng-container matColumnDef="check">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-2 ps-3 borde-derecha"> Check </th>
+                  <td mat-cell *matCellDef="let element" class="borde-derecha" style="text-align: center;">
+                    <input class="form-check-input" type="checkbox" [checked]="checkReino(element.reino.id)" [value]="element.reino.id" (change)="onCheckChange($event)">
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="reinoString">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-4 ps-3 borde-derecha"> Reino </th>
+                  <td mat-cell *matCellDef="let element" class="borde-derecha" style="text-align: center;"> {{element.reino.nombre}} </td>
+                </ng-container>
+                <ng-container matColumnDef="personaje" >
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-4 ps-3 borde-derecha"> Personaje </th>
+                  <td mat-cell *matCellDef="let element" class="borde-derecha" style="text-align: center;"> {{element.personaje?element.personaje.nombre:'-'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="editar" >
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-2 ps-3"> Editar </th>
+                  <td mat-cell *matCellDef="let element" style="text-align: center;">
+                    <button mat-raised-button style="min-width: 0px; background-color: rgb(167, 167, 167);" class="px-1 py-0" (click)="openModalPersonaje(element)">
+                      <mat-icon style="color: white" class="mat-15">edit</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
+                <tr class="tablerow" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+              </table>
+
+              <div class="row text-center mt-3 mx-auto w-100">
+                <div class="col-sm-12">
+                  <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+              </div>
+            </form><!-- End General Form Elements -->
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="card">
+          <div class="card-body">
+
+            <!-- <h5 class="card-title">Selección de reinos</h5> -->
+            <!-- General Form Elements -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="background-spinner" *ngIf="cargando">
+  <mat-spinner diameter="60"></mat-spinner>
+</div>

@@ -1,0 +1,115 @@
+<h1 mat-dialog-title>Agregar movimiento</h1>
+<form (submit)="agregarMovimiento()" [formGroup]="formulario">
+
+  <div mat-dialog-content>
+    <div class="row">
+
+      <p>Tipo de movimiento</p>
+      <mat-form-field appearance="fill">
+        <mat-label>Tipo de movimiento</mat-label>
+        <mat-select formControlName="tipomovSelect" (selectionChange)="modificarValidaciones()">
+          <mat-option value="ingreso">Ingreso</mat-option>
+          <mat-option value="venta">Venta de oro</mat-option>
+          <mat-option value="retiro">Retiro</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <p>Oro en movimiento<span *ngIf="formulario.value.tipomovSelect != 'ingreso'" style="font-size: small"> - (maximo: {{max}})</span></p>
+      <mat-form-field appearance="fill">
+        <mat-label>Cantidad de Oro en K</mat-label>
+        <input type="number" autocomplete="off" onfocus="this.select()" matInput formControlName="formOro">
+      </mat-form-field>
+      <mat-error *ngIf="!formulario.controls.formOro.valid && formulario.controls.formOro.touched && formulario.controls.tipomovSelect.value != 'ingreso'">
+        Por favor, ingresa un valor válido
+      </mat-error>
+    </div>
+    <div class="row">
+      <p>Reino</p>
+      <mat-form-field appearance="fill">
+        <mat-label>Reino</mat-label>
+        <mat-select formControlName="reinoSelect" (selectionChange)="modificarMax()">
+          <mat-option *ngFor="let inventario of inventarios; let i = index"  value="{{inventario.reino}}">{{inventario.reinoString}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="row" *ngIf="formulario.controls.tipomovSelect.value == 'ingreso'">
+      <p>Estado del oro</p>
+      <mat-form-field appearance="fill">
+        <mat-label>Estado del oro</mat-label>
+        <mat-select formControlName="estadoSelect">
+          <mat-option value="inventario">En inventario</mat-option>
+          <mat-option value="pendiente">Pendiente</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="row" *ngIf="formulario.controls.tipomovSelect.value == 'venta'">
+      <p>Cantidad de USD recibida</p>
+      <mat-form-field appearance="fill">
+        <mat-label>USD recibidos</mat-label>
+        <input type="number" autocomplete="off" onfocus="this.select()" matInput formControlName="formUsd">
+      </mat-form-field>
+    </div>
+    <div class="row" *ngIf="formulario.controls.tipomovSelect.value == 'venta'">
+      <p>Tipo de venta</p>
+      <mat-form-field appearance="fill">
+        <mat-label>Tipo de venta</mat-label>
+        <mat-select formControlName="tipoventaSelect">
+          <mat-option value="trade">Trade</mat-option>
+          <mat-option value="subasta">Subasta</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="row" *ngIf="formulario.controls.tipomovSelect.value == 'venta' && formulario.controls.tipoventaSelect.value == 'subasta'">
+      <p>Tabla de conversión</p>
+      <table class="table border datatable table-bordered table-striped">
+        <thead>
+          <tr class="d-flex">
+            <th class="col-4 border text-center" scope="col">Oro necesario</th>
+            <th class="col-4 border text-center" scope="col">Pérdida</th>
+            <th class="col-4 border text-center" scope="col">Recibido x 100K</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="d-flex">
+            <th class="col-4 text-center" scope="row"><a href="#">{{getOroNecesario() | number : '1.0-0'}}</a></th>
+            <td class="col-4 text-end">{{getPerdida() | number : '1.0-0'}}</td>
+            <td class="col-4 text-end"><a href="#" class="text-primary">{{getRecibidox100K() | number: '1.0-2'}}</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row" *ngIf="formulario.controls.tipomovSelect.value == 'venta' && formulario.controls.tipoventaSelect.value == 'trade'">
+      <div class="row">
+        <div class="col-7"><h4 class="card-title">Tabla de conversión </h4></div>
+        <div class="col-5 ms-auto mt-auto"><p class="text-end">Valor Token: {{(userPref)?userPref.valorToken:0}}g</p></div>
+
+      </div>
+      <table class="table border datatable table-bordered table-striped">
+        <thead>
+          <tr class="d-flex">
+            <th class="col-4 border text-center" scope="col">Oro vendido</th>
+            <th class="col-4 border text-center" scope="col">Recibido x 100K</th>
+            <th class="col-4 border text-center" scope="col">Valor x Token</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="d-flex">
+            <th class="col-4 text-center" scope="row"><a href="#">{{formulario.controls.formOro.value}}K</a></th>
+            <td class="col-4 text-end">{{getRecibidox100K() | number: '1.2-2'}}</td>
+            <td class="col-4 text-end"><a class="text-primary me-2">{{getRecibidoxToken() | number: '1.2-2'}}</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <a mat-button (click)="cerrarModal()">Volver</a>
+    <button type="submit" mat-button cdkFocusInitial>Guardar</button>
+  </div>
+</form>
+
+<div class="background-spinner" *ngIf="cargando">
+  <mat-spinner diameter="60"></mat-spinner>
+</div>

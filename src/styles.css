@@ -1,1 +1,56 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.snackbar-success{
+  display: flex;
+  min-height: 25px !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background-color: green !important;
+  color: white;
+}
+
+.mat-simple-snack-bar-content{
+  font-size: 16px !important;
+}
+
+.snackbar-error{
+  display: flex;
+  font-size: 16px !important;
+  min-height: 25px !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background-color: rgb(128, 0, 0) !important;
+  color: white;
+}
+
+.mat-simple-snackbar-action .mat-button-wrapper{
+  color: white
+}
+
+.mat-error:not(.autenticacion .mat-error) {
+  position: relative;
+  bottom: 20px !important;
+}
+
+
+th .mat-sort-header-container{
+  justify-content: center !important
+}
+
+
+.background-spinner {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 998;
+}
