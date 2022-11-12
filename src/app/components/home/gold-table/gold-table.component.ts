@@ -101,7 +101,7 @@ export class GoldTableComponent implements OnInit {
         });
       }
     } else {
-      this.snackBar.open(('No se ha configurado ningún personaje. '+ goldtable.reinoString ), 'OK', {
+      this.snackBar.open(('No se ha configurado ningún personaje.'), 'OK', {
         panelClass: 'snackbar-error',
         duration: 3000,
         horizontalPosition: 'center',

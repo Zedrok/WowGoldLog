@@ -175,13 +175,12 @@ export class AjustesComponent implements OnInit {
       reinosGuardados.push(control.value);
     });
     console.log(this.form.get('checkReinos') as FormArray);
-    this.cargando = false;
-    // await this.reinosService.guardarReinosUsuario(reinosGuardados, this.snackBar).finally(
-    //   () => {
-    //     this.goldTableService.guardarTablas(this.inventarios);
-    //     this.cargando = false;
-    //   }
-    // )
+    await this.reinosService.guardarReinosUsuario(reinosGuardados, this.snackBar).finally(
+      () => {
+        this.goldTableService.guardarTablas(this.inventarios);
+        this.cargando = false;
+      }
+    )
   }
 
 
