@@ -7,6 +7,8 @@ import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/fo
 import { LoginService } from '../../../services/login.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Movimiento } from 'src/app/models/movimiento.model';
+import { MovimientoService } from '../../../services/movimiento.service';
 
 @Component({
   selector: 'app-modal-pendiente',
@@ -27,6 +29,7 @@ export class ModalPendienteComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: GoldTable,
     private loginService: LoginService,
     private _snackBar: MatSnackBar,
+    private movimientoService: MovimientoService
   ) {
     this.goldTable = data;
     this.formOro.addValidators(Validators.min(1))
@@ -55,6 +58,7 @@ export class ModalPendienteComponent implements OnInit {
   }
   ngOnInit(): void {
     console.log(this.goldTable)
+    this.setValorMaximo()
   }
 
   cerrarModal(): void {
@@ -74,21 +78,38 @@ export class ModalPendienteComponent implements OnInit {
     this.goldTable = this.getGoldTable(this.goldTable.reino)
     let indexTable = this.inventarios.indexOf(this.goldTable);
 
+    let movimiento: Movimiento = {
+      uid: JSON.parse(localStorage.getItem('userData')!).uid,
+      cantOro: this.formOro.value!,
+      tipoMov: 'confirm'!,
+      reino: this.goldTable.reino!,
+      reinoString: this.goldTable.reinoString!,
+      fecha: new Date()
+    }
+
     this.goldTable.inventario += this.formOro.value;
     this.goldTable.pendiente -= this.formOro.value;
 
     this.inventarios[indexTable] = this.goldTable;
 
-    if (await this.goldtableService.guardarTablas(this.inventarios) ) {
-      this._snackBar.open('Oro confirmado con éxito!', 'OK', {
-        panelClass: 'snackbar-success',
-        duration: 3000,
-        horizontalPosition: 'center',
-        verticalPosition: 'top',
-      });
-      this.cerrarModal()
+    if (await this.goldtableService.guardarTablas(this.inventarios)) {
+      if (await this.movimientoService.guardarMovimiento(movimiento)) {
+        this._snackBar.open('Oro confirmado con éxito!', 'OK', {
+          panelClass: 'snackbar-success',
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+        });
+      } else {
+        this._snackBar.open('Error al confirmar oro', 'OK', {
+          panelClass: 'snackbar-error',
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+        });
+      }
     } else {
-      this._snackBar.open('Error al confirmar oro', 'OK', {
+      this._snackBar.open('Error al guardar tabla', 'OK', {
         panelClass: 'snackbar-error',
         duration: 3000,
         horizontalPosition: 'center',

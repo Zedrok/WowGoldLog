@@ -23,7 +23,7 @@ export class MovimientoService {
   constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private router: Router) {
     this.user = JSON.parse(localStorage.getItem('userData')!) as User
     this.movColeccion = afs.collection(
-      'movimientos', (ref) => ref.where('uid', '==', this.user.uid)
+      'movimientos', (ref) => ref.where('uid', '==', this.user.uid).orderBy('fecha', 'desc')
     );
   }
 
@@ -44,5 +44,11 @@ export class MovimientoService {
   guardarMovimiento(nuevoMovimiento: Movimiento) {
     let res = false;
     return this.movColeccion.add(nuevoMovimiento).then(() => res = true).finally(()=>{return res})
+  }
+
+  eliminarMovimiento(idMov: string) {
+    let res = false;
+    this.movimientoDoc = this.afs.doc(`movimientos/${idMov}`);
+    return this.movimientoDoc.delete().then(() => { res = true; return true}).finally(() => {return res})
   }
 }

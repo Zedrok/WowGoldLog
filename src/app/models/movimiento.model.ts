@@ -6,5 +6,7 @@ export interface Movimiento{
   tipoMov: string,
   reino: string,
   reinoString?: string,
-  fecha: Date
+  fecha: Date,
+  eliminable?: boolean,
+  fuente?: string,
 }

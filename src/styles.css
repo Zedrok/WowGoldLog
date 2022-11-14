@@ -54,3 +54,12 @@ th .mat-sort-header-container{
   background-color: rgba(255, 255, 255, 0.5);
   z-index: 998;
 }
+
+.datapicker .mat-form-field-wrapper{
+  padding-bottom: 0px !important
+}
+
+.datapicker .mat-form-field-infix{
+  padding: 0px;
+  contain: content;
+}

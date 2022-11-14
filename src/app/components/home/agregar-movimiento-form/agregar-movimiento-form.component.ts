@@ -188,9 +188,11 @@ export class AgregarMovimientoForm {
         if (this.formulario.value.estadoSelect == 'pendiente') {
           goldTableNueva.pendiente += movimiento.cantOro
           goldTableNueva.total += movimiento.cantOro
+          movimiento.fuente = 'pendiente'
         } else {
           goldTableNueva.inventario += movimiento.cantOro
           goldTableNueva.total += movimiento.cantOro
+          movimiento.fuente = 'inventario'
         }
         break;
       }

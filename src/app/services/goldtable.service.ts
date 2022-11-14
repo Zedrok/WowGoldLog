@@ -46,6 +46,16 @@ export class GoldTableService {
             if (datosFiltrados.length == 0) {
               return null
             }
+            datosFiltrados.sort(((tabla1, tabla2) => {
+              if (tabla1.reino > tabla2.reino) {
+                return 1;
+              }
+              if (tabla1.reino < tabla2.reino) {
+                return -1;
+              }
+              return 0;
+            }))
+
             this.guardarTablas(datosFiltrados)
             return datosFiltrados
           } else {
@@ -70,6 +80,15 @@ export class GoldTableService {
                 )
               }
             })
+            datosFiltrados.sort(((tabla1, tabla2) => {
+              if (tabla1.reino > tabla2.reino) {
+                return 1;
+              }
+              if (tabla1.reino < tabla2.reino) {
+                return -1;
+              }
+              return 0;
+            }))
             return datosFiltrados;
           }
         }

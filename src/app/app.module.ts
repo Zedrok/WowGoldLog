@@ -59,7 +59,10 @@ import { UserPrefService } from './services/userpref.service';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { ModalUsdComponent } from './components/home/modal-usd/modal-usd.component';
 import { ModalPersonajeComponent } from './components/ajustes/modal-personaje/modal-personaje.component';
-import {ClipboardModule} from '@angular/cdk/clipboard';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MomentDateModule } from '@angular/material-moment-adapter'
 
 registerLocaleData(es);
 
@@ -111,7 +114,10 @@ registerLocaleData(es);
     MatPaginatorModule,
     MatSortModule,
     MatProgressSpinnerModule,
-    ClipboardModule
+    ClipboardModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MomentDateModule
   ],
   providers: [
     SidebarService,

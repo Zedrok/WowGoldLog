@@ -35,6 +35,7 @@ export class AjustesComponent implements OnInit {
   goldTableSub!: Subscription;
   inventarios: GoldTable[] = [];
   cargando = false;
+  openModal = false;
 
   datosAjustes: DataSourceAjustes[] = [];
 
@@ -169,30 +170,36 @@ export class AjustesComponent implements OnInit {
   }
 
   async guardarReinos() {
-    this.cargando = true;
-    let reinosGuardados: string[] = [];
-    (this.form.get('checkReinos') as FormArray).controls.forEach((control) => {
-      reinosGuardados.push(control.value);
-    });
-    console.log(this.form.get('checkReinos') as FormArray);
-    await this.reinosService.guardarReinosUsuario(reinosGuardados, this.snackBar).finally(
-      () => {
-        this.goldTableService.guardarTablas(this.inventarios);
-        this.cargando = false;
-      }
-    )
+    if (this.openModal == false) {
+      this.cargando = true;
+      let reinosGuardados: string[] = [];
+      (this.form.get('checkReinos') as FormArray).controls.forEach((control) => {
+        reinosGuardados.push(control.value);
+      });
+      console.log(this.form.get('checkReinos') as FormArray);
+      await this.reinosService.guardarReinosUsuario(reinosGuardados, this.snackBar).finally(
+        () => {
+          this.goldTableService.guardarTablas(this.inventarios);
+          this.cargando = false;
+        }
+      )
+    }
   }
 
 
   openModalPersonaje(datos: DataSourceAjustes) {
+    this.openModal = true;
+    console.log(this.openModal)
     const dialogRef = this.dialog.open(ModalPersonajeComponent, {
       width: '400px',
       data: datos
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('modal cerrado');
+      this.openModal = false;
+      console.log(this.openModal)
     });
+
   }
 
 }

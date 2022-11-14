@@ -24,6 +24,10 @@ export class LoginService {
         this.getUser(user.uid).pipe(
           map((userData) => {
             if (userData) {
+              if (userData.reinos) {
+                userData.reinos.sort()
+              }
+
               localStorage.setItem('userAfsData', JSON.stringify(this.userData));
               localStorage.setItem('userData', JSON.stringify(userData))
               this.datosCargados.next(true);
@@ -111,6 +115,9 @@ export class LoginService {
 
   setUser(user: User) {
     this.userData = user;
+    if (user.reinos) {
+      user.reinos.sort()
+    }
     localStorage.setItem('userData', JSON.stringify(user))
     localStorage.setItem('userAfsData', JSON.stringify(this.userData));
     this.datosCargados.next(true);
