@@ -2,8 +2,6 @@ table {
   width: 100%;
 }
 
-
-
 .dataTable-hover .tablerow:hover {
   background: whitesmoke !important;
 }

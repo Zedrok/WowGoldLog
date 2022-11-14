@@ -140,6 +140,7 @@ export class ResumenComponent implements OnInit {
   }
 
   prepararDias() {
+    this.date.clearValidators()
     moment.updateLocale('es', {
       week : {
           dow : 2,
