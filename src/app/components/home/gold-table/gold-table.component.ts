@@ -38,6 +38,10 @@ export class GoldTableComponent implements OnInit {
   dataSource = new MatTableDataSource<GoldTable>([]);
   userPref!: UserPref;
   userPrefSub!: Subscription;
+  inventariosActivos: GoldTable[] = [];
+  arrayReinos: string[] = JSON.parse(localStorage.getItem('userData')!).reinos
+  ? JSON.parse(localStorage.getItem('userData')!).reinos
+  : [];
 
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -59,11 +63,16 @@ export class GoldTableComponent implements OnInit {
           this.goldTableSub = this.goldtableService.cargarGoldTables().subscribe(
             (resultado) => {
               if (resultado != null) {
-                this.goldtableService.cargarNombreReinos(resultado);
                 this.inventarios = resultado;
-                this.dataSource = new MatTableDataSource<GoldTable>(this.inventarios);
-                this.dataSource.sort = this.sort;
+                this.agregarTablasFaltantes(this.inventarios);
+                this.goldtableService.cargarNombreReinos(this.inventarios);
+                this.inventariosActivos = this.filtrarTablasUsuario(this.inventarios);
+              } else {
+                this.agregarTablasFaltantes(this.inventarios);
+                this.inventariosActivos = this.filtrarTablasUsuario(this.inventarios);
               }
+              this.dataSource = new MatTableDataSource<GoldTable>(this.inventariosActivos);
+              this.dataSource.sort = this.sort;
             }
           )
           this.userPrefSub = this.userPrefService.cargarUserPref().subscribe((resultado) => {
@@ -77,6 +86,43 @@ export class GoldTableComponent implements OnInit {
         }
       }
     )
+  }
+
+  agregarTablasFaltantes(tablas: GoldTable[]) {
+    this.arrayReinos.forEach((reino) => {
+      if (
+        tablas.filter((tabla) => reino === tabla.reino)
+          .length == 0
+      ) {
+        tablas.push({
+          inventario: 0,
+          pendiente: 0,
+          reino: reino,
+          total: 0,
+        });
+      }
+    });
+  }
+
+  filtrarTablasUsuario(tablas: GoldTable[]) {
+    let datosFiltrados = tablas.filter((tabla) =>
+      this.arrayReinos.some((reino) => reino === tabla.reino)
+    );
+
+    if (datosFiltrados.length == 0) {
+      return [];
+    }
+
+    datosFiltrados.sort((tabla1, tabla2) => {
+      if (tabla1.reino > tabla2.reino) {
+        return 1;
+      }
+      if (tabla1.reino < tabla2.reino) {
+        return -1;
+      }
+      return 0;
+    });
+    return datosFiltrados;
   }
 
   copiarPersonaje(goldtable: GoldTable) {

@@ -62,7 +62,9 @@ import { ModalPersonajeComponent } from './components/ajustes/modal-personaje/mo
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MomentDateModule } from '@angular/material-moment-adapter'
+import { MomentDateModule } from '@angular/material-moment-adapter';
+import { ModalConfirmComponent } from './components/historial-oro/modal-confirm/modal-confirm.component';
+import { ResumenComponent } from './components/resumen/resumen.component'
 
 registerLocaleData(es);
 
@@ -85,6 +87,8 @@ registerLocaleData(es);
     ModalTokenComponent,
     ModalUsdComponent,
     ModalPersonajeComponent,
+    ModalConfirmComponent,
+    ResumenComponent,
   ],
   imports: [
     BrowserModule,

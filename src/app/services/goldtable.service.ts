@@ -30,66 +30,12 @@ export class GoldTableService {
       map(
         (accion) => {
           if (accion.payload.exists === false) {
-            let datosFiltrados: GoldTable[] = [];
-            reinosUsuario.forEach((reino) => {
-              if (datosFiltrados.filter((tablaUsuario) => reino === tablaUsuario.reino).length == 0) {
-                datosFiltrados.push(
-                  {
-                    inventario: 0,
-                    pendiente: 0,
-                    reino: reino,
-                    total: 0
-                  }
-                )
-              }
-            })
-            if (datosFiltrados.length == 0) {
-              return null
-            }
-            datosFiltrados.sort(((tabla1, tabla2) => {
-              if (tabla1.reino > tabla2.reino) {
-                return 1;
-              }
-              if (tabla1.reino < tabla2.reino) {
-                return -1;
-              }
-              return 0;
-            }))
-
-            this.guardarTablas(datosFiltrados)
-            return datosFiltrados
+            return null
           } else {
             // Se guarda el arreglo de reinos en 'datos'
             const datos = (accion.payload.data()! as any).goldTables as GoldTable[];
             // Filtrado de datos, sólo reinos que se encuentren en el arreglo permitido
-            let datosFiltrados = datos.filter((tabla) => reinosUsuario.some((reino) => reino === tabla.reino))
-            let total = 0;
-            datosFiltrados.forEach((tabla) => {
-              total += tabla.total
-            })
-
-            reinosUsuario.forEach((reino) => {
-              if(datosFiltrados.filter((tablaUsuario) => reino === tablaUsuario.reino).length == 0) {
-                datosFiltrados.push(
-                  {
-                    inventario: 0,
-                    pendiente: 0,
-                    reino: reino,
-                    total: 0,
-                  }
-                )
-              }
-            })
-            datosFiltrados.sort(((tabla1, tabla2) => {
-              if (tabla1.reino > tabla2.reino) {
-                return 1;
-              }
-              if (tabla1.reino < tabla2.reino) {
-                return -1;
-              }
-              return 0;
-            }))
-            return datosFiltrados;
+            return datos;
           }
         }
       )
@@ -114,7 +60,6 @@ export class GoldTableService {
       )
     })
   }
-
 
   guardarTablas(goldTablesNuevas: GoldTable[]) {
     console.log('se guardaron tablas: '+ JSON.stringify(goldTablesNuevas));

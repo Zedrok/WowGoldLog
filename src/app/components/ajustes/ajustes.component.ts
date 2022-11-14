@@ -34,6 +34,7 @@ export class AjustesComponent implements OnInit {
   form: FormGroup;
   goldTableSub!: Subscription;
   inventarios: GoldTable[] = [];
+  inventariosActivos: GoldTable[] = [];
   cargando = false;
   openModal = false;
 
@@ -53,7 +54,7 @@ export class AjustesComponent implements OnInit {
     private goldTableService: GoldTableService,
     private loginService: LoginService,
     private userPrefService: UserPrefService,
-    public dialog: MatDialog,
+    public dialog: MatDialog
   ) {
     this.loginService.getLoginStatus().subscribe((status) => {
       if (status) {
@@ -62,8 +63,14 @@ export class AjustesComponent implements OnInit {
           .cargarGoldTables()
           .subscribe((resultado) => {
             if (resultado != null) {
-              this.goldTableService.cargarNombreReinos(resultado);
               this.inventarios = resultado;
+              this.agregarTablasFaltantes(this.inventarios);
+              this.goldTableService.cargarNombreReinos(this.inventarios);
+              this.inventariosActivos = this.filtrarTablasUsuario(this.inventarios);
+            } else {
+              this.agregarTablasFaltantes(this.inventarios);
+              this.goldTableService.cargarNombreReinos(this.inventarios);
+              this.inventariosActivos = this.filtrarTablasUsuario(this.inventarios);
             }
           });
 
@@ -119,6 +126,43 @@ export class AjustesComponent implements OnInit {
     this.crearCheckArray();
   }
 
+  agregarTablasFaltantes(tablas: GoldTable[]) {
+    this.arrayReinos.forEach((reino) => {
+      if (
+        tablas.filter((tabla) => reino === tabla.reino)
+          .length == 0
+      ) {
+        tablas.push({
+          inventario: 0,
+          pendiente: 0,
+          reino: reino,
+          total: 0,
+        });
+      }
+    });
+  }
+
+  filtrarTablasUsuario(tablas: GoldTable[]) {
+    let datosFiltrados = tablas.filter((tabla) =>
+      this.arrayReinos.some((reino) => reino === tabla.reino)
+    );
+
+    if (datosFiltrados.length == 0) {
+      return [];
+    }
+
+    datosFiltrados.sort((tabla1, tabla2) => {
+      if (tabla1.reino > tabla2.reino) {
+        return 1;
+      }
+      if (tabla1.reino < tabla2.reino) {
+        return -1;
+      }
+      return 0;
+    });
+    return datosFiltrados;
+  }
+
   ngOnInit(): void {}
 
   initModelForm(): FormGroup {
@@ -137,7 +181,7 @@ export class AjustesComponent implements OnInit {
       // Add a new control in the arrayForm
       formArray.push(new FormControl(event.target.value));
     } else {
-    /* unselected */
+      /* unselected */
       // find the unselected element
       let i: number = 0;
 
@@ -173,33 +217,32 @@ export class AjustesComponent implements OnInit {
     if (this.openModal == false) {
       this.cargando = true;
       let reinosGuardados: string[] = [];
-      (this.form.get('checkReinos') as FormArray).controls.forEach((control) => {
-        reinosGuardados.push(control.value);
-      });
+      (this.form.get('checkReinos') as FormArray).controls.forEach(
+        (control) => {
+          reinosGuardados.push(control.value);
+        }
+      );
       console.log(this.form.get('checkReinos') as FormArray);
-      await this.reinosService.guardarReinosUsuario(reinosGuardados, this.snackBar).finally(
-        () => {
+      await this.reinosService
+        .guardarReinosUsuario(reinosGuardados, this.snackBar)
+        .finally(() => {
           this.goldTableService.guardarTablas(this.inventarios);
           this.cargando = false;
-        }
-      )
+        });
     }
   }
 
-
   openModalPersonaje(datos: DataSourceAjustes) {
     this.openModal = true;
-    console.log(this.openModal)
+    console.log(this.openModal);
     const dialogRef = this.dialog.open(ModalPersonajeComponent, {
       width: '400px',
-      data: datos
+      data: datos,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       this.openModal = false;
-      console.log(this.openModal)
+      console.log(this.openModal);
     });
-
   }
-
 }

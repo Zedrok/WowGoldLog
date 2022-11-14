@@ -1,0 +1,39 @@
+<h1 mat-dialog-title class="mb-2">Confirmar eliminación de movimiento</h1>
+<form #f="ngForm" (submit)="confirmar()">
+  <div mat-dialog-content>
+    <div class="row">
+      <div>
+        <mat-list style="border: solid 1px; border-radius: 8px; border-color: lightgray;">
+          <mat-list-item>
+            <div class="col-3">Fecha </div>
+            <div class="col-9"><span> {{ fechaString | titlecase}} </span></div>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <div class="col-3">Tipo </div>
+            <div class="col-9" ><span ngClass="text{{data.tipoMov}}"> {{ (data.tipoMov=='confirm'?'Confirmación':data.tipoMov) | titlecase}} </span></div>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <div class="col-3">Reino</div>
+            <div class="col-9"><span> {{data.reinoString}} </span></div>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <div class="col-3">Oro </div>
+            <div class="col-9"><span> {{ data.cantOro }}K </span></div>
+          </mat-list-item>
+          <mat-divider *ngIf="data.tipoMov == 'venta'"></mat-divider>
+          <mat-list-item *ngIf="data.tipoMov == 'venta'">
+            <div class="col-3">USD</div>
+            <div class="col-9"><span> ${{ data.cantUsd | number: '1.2-2' }} </span></div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <a mat-stroked-button (click)="cerrarModal()">Volver</a>
+    <button mat-flat-button type="submit" cdkFocusInitial color="warn">Eliminar</button>
+  </div>
+</form>

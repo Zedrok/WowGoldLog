@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 import { LoginService } from '../../services/login.service';
 import { GoldTableService } from '../../services/goldtable.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
@@ -17,6 +17,8 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter'
 import { UserPref } from '../../models/userpref.model';
 import { UserPrefService } from '../../services/userpref.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalConfirmComponent } from './modal-confirm/modal-confirm.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -51,13 +53,21 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
   displayedColumns = ['fecha', 'reinoString', 'cantOro', 'cantUsd', 'tipoMov', 'eliminar'];
   movimientos!: Movimiento[]
   movimientoSub!: Subscription;
-  movimientosFiltrados: Movimiento[];
+  movimientosFiltradosPorMes: Movimiento[];
+  movimientosFiltradosPorCheck: Movimiento[];
   goldTableSub!: Subscription;
   inventarios: GoldTable[] = [];
   cargando = false;
   date = new FormControl(moment());
   userPref!: UserPref
   userPrefSub!: Subscription;
+  tiposMov: string[] = ['ingreso', 'venta', 'retiro', 'confirm']
+  formTiposMov = this._formBuilder.group({
+    ingreso: true,
+    venta: true,
+    retiro: true,
+    confirm: true,
+  });
 
   oroMensual: number;
   oroVendido: number;
@@ -74,14 +84,17 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
     private loginService: LoginService,
     private goldtableService: GoldTableService,
     private _snackBar: MatSnackBar,
-    private userPrefService: UserPrefService
+    private userPrefService: UserPrefService,
+    private _formBuilder: FormBuilder,
+    public dialog: MatDialog
   ) {
     this.date.value!.locale('es');
     this.oroMensual = 0
     this.oroVendido = 0
     this.usdX100K = 0
     this.usdConseguidos = 0
-    this.movimientosFiltrados = [];
+    this.movimientosFiltradosPorMes = [];
+    this.movimientosFiltradosPorCheck = [];
     loginService.getLoginStatus().subscribe(
       (status) => {
         if (status) {
@@ -101,7 +114,8 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
               this.movimientos = resultado
               this.movimientos[0].eliminable = true;
               this.filtrarMovimientos(this.date.value!);
-              this.dataSource = new MatTableDataSource<Movimiento>(this.movimientosFiltrados);
+              this.filtrarTipoMov();
+              this.dataSource = new MatTableDataSource<Movimiento>(this.movimientosFiltradosPorMes);
               this.dataSource.sort = this.sort;
               this.paginator._intl.itemsPerPageLabel = 'Movimientos por página'
               this.dataSource.paginator = this.paginator;
@@ -133,8 +147,31 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
     // this.movimientos[1].fecha.getTime()
   }
 
+  filtrarTipoMov() {
+    let tiposMovFiltrados: string[] = [];
+    this.tiposMov.forEach(
+      (tipomov) => {
+        if (this.formTiposMov.get(tipomov)!.value == true) {
+          tiposMovFiltrados.push(tipomov);
+        }
+      }
+    )
+
+    this.movimientosFiltradosPorCheck = this.movimientosFiltradosPorMes.filter((resultado) => {
+      let res = tiposMovFiltrados.some((tipomov) => {
+        return tipomov == resultado.tipoMov
+      })
+      return res
+    })
+
+    this.dataSource = new MatTableDataSource<Movimiento>(this.movimientosFiltradosPorCheck);
+    this.dataSource.sort = this.sort;
+    this.paginator._intl.itemsPerPageLabel = 'Movimientos por página'
+    this.dataSource.paginator = this.paginator;
+  }
+
   filtrarMovimientos(fechaFiltrada: Moment) {
-    this.movimientosFiltrados = this.movimientos.filter(
+    this.movimientosFiltradosPorMes = this.movimientos.filter(
       (resultado) => {
         return moment(resultado.fecha).isSame(fechaFiltrada, 'month') && moment(resultado.fecha).isSame(fechaFiltrada, 'year')
       }
@@ -144,10 +181,7 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
   aumentarMes() {
     this.date.value!.add(1, 'month');
     this.filtrarMovimientos(this.date.value!);
-    this.dataSource = new MatTableDataSource<Movimiento>(this.movimientosFiltrados);
-    this.dataSource.sort = this.sort;
-    this.paginator._intl.itemsPerPageLabel = 'Movimientos por página'
-    this.dataSource.paginator = this.paginator;
+    this.filtrarTipoMov();
 
     const ctrlValue = this.date.value!;
     ctrlValue.month(this.date.value!.month());
@@ -159,10 +193,7 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
   disminuirMes() {
     this.date.value!.subtract(1, 'month');
     this.filtrarMovimientos(this.date.value!);
-    this.dataSource = new MatTableDataSource<Movimiento>(this.movimientosFiltrados);
-    this.dataSource.sort = this.sort;
-    this.paginator._intl.itemsPerPageLabel = 'Movimientos por página'
-    this.dataSource.paginator = this.paginator;
+    this.filtrarTipoMov();
 
     const ctrlValue = this.date.value!;
     ctrlValue.month(this.date.value!.month());
@@ -178,7 +209,8 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
     this.date.setValue(ctrlValue);
 
     this.filtrarMovimientos(this.date.value!);
-    this.dataSource = new MatTableDataSource<Movimiento>(this.movimientosFiltrados);
+    this.filtrarTipoMov();
+    this.dataSource = new MatTableDataSource<Movimiento>(this.movimientosFiltradosPorCheck);
     this.dataSource.sort = this.sort;
     this.paginator._intl.itemsPerPageLabel = 'Movimientos por página'
     this.dataSource.paginator = this.paginator;
@@ -187,6 +219,21 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
   }
 
   ngAfterViewInit() {
+  }
+
+  abrirModalEliminar(movimiento: Movimiento) {
+    const dialogRef = this.dialog.open(ModalConfirmComponent, {
+      width: '400px',
+      data: movimiento,
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      console.log('The dialog was closed' + result);
+      if (result == true) {
+        this.eliminarMovimiento(movimiento);
+      }
+    });
+
   }
 
   async eliminarMovimiento(movimiento: Movimiento) {
@@ -263,7 +310,7 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
 
   ActualizarOroMensual() {
     let total = 0;
-    this.movimientosFiltrados.forEach((tabla) => {
+    this.movimientosFiltradosPorMes.forEach((tabla) => {
       if (tabla.tipoMov == 'ingreso') {
         total += tabla.cantOro
       } else {
@@ -278,7 +325,7 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
   ActualizarOroVendido() {
     let totalOro = 0;
     let totalUsd = 0;
-    this.movimientosFiltrados.forEach((tabla) => {
+    this.movimientosFiltradosPorMes.forEach((tabla) => {
       if (tabla.tipoMov == 'venta') {
         totalOro += tabla.cantOro
         totalUsd += tabla.cantUsd!

@@ -111,7 +111,6 @@ export class ModalPersonajeComponent implements OnInit {
         horizontalPosition: 'center',
         verticalPosition: 'top',
       });
-      this.cerrarModal();
     } else {
       this._snackBar.open('Error al guardar nombre', 'OK', {
         panelClass: 'snackbar-error',
@@ -120,6 +119,7 @@ export class ModalPersonajeComponent implements OnInit {
         verticalPosition: 'top',
       });
     }
+    this.cerrarModal();
     this.cargando = false;
     // this.cerrarModal()
   }

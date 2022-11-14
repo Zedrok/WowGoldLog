@@ -11,7 +11,7 @@
 
   <section class="section">
     <div class="row">
-      <div class="col-9">
+      <div class="col-8">
         <div class="card">
           <div class="card-body">
             <div class="row">
@@ -107,7 +107,7 @@
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-1 ps-3 borde-derecha"> </th>
                   <td mat-cell *matCellDef="let element" class="borde-derecha" style="text-align: center;">
                     <div *ngIf="(element.eliminable) ; else elseEliminable">
-                      <button (click)="eliminarMovimiento(element)" mat-raised-button
+                      <button (click)="abrirModalEliminar(element)" mat-raised-button
                         style="min-width: 0px; background-color: #a40000;" class="px-1 py-0">
                         <mat-icon style="color: white" class="mat-15">delete</mat-icon>
                       </button>
@@ -130,71 +130,91 @@
           </div>
         </div>
       </div>
-      <div class="col-3">
-      <section class="section dashboard" style="width: fit-content;">
+      <div class="col-2">
+        <section class="section dashboard">
+          <div class="card info-card revenue-card">
+            <div class="card-body">
+              <h2 class="card-title titulo-stats">Oro del mes</h2>
+              <div class="d-flex align-items-center">
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center "
+                  style="height: 3.5vw; width: 3.5vw">
+                  <i class="bi bi-currency-dollar" style="font-size: 1.5vw"></i>
+                </div>
+                <div class="ps-2">
+                  <h6>{{oroMensual | number: '1.0-0'}}K
+                  </h6>
+                  <h5 class="card-title py-0">
+                    <span>~${{getValorUSD(oroMensual) | number: '1.2-2'}}</span>
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card info-card revenue-card">
+            <div class="card-body">
+              <h2 class="card-title titulo-stats">Oro Vendido</h2>
+              <div class="d-flex align-items-center">
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center "
+                  style="height: 3.5vw; width: 3.5vw">
+                  <i class="bi bi-currency-dollar" style="font-size: 1.5vw"></i>
+                </div>
+                <div class="ps-2">
+                  <h6>{{ oroVendido | number: '1.0-0'}}K
+                  </h6>
+                  <h5 class="card-title py-0">
+                    <span>~${{usdX100K | number: '1.2-2'}} / 100K</span>
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <div class="px-2">
-            <div class="card info-card revenue-card">
-              <div class="card-body">
-                <h2 class="card-title titulo-stats">Oro del mes</h2>
-                <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center "
-                    style="height: 3.5vw; width: 3.5vw">
-                    <i class="bi bi-currency-dollar" style="font-size: 1.5vw"></i>
-                  </div>
-                  <div class="ps-2">
-                    <h6>{{oroMensual | number: '1.0-0'}}K
-                    </h6>
-                    <h5 class="card-title py-0">
-                      <span>~${{getValorUSD(oroMensual) | number: '1.2-2'}}</span>
-                    </h5>
-                  </div>
+          <div class="card info-card revenue-card">
+            <div class="card-body">
+              <h2 class="card-title titulo-stats">USD del mes</h2>
+              <div class="d-flex align-items-center">
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center "
+                  style="height: 3.5vw; width: 3.5vw">
+                  <i class="bi bi-currency-dollar" style="font-size: 1.5vw"></i>
+                </div>
+                <div class="ps-2">
+                  <h6>
+                    ${{ usdConseguidos | number: '1.2-2'}}
+                  </h6>
                 </div>
               </div>
             </div>
           </div>
-          <div class="px-2">
-            <div class="card info-card revenue-card">
-              <div class="card-body">
-                <h2 class="card-title titulo-stats">Oro Vendido</h2>
-                <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center "
-                    style="height: 3.5vw; width: 3.5vw">
-                    <i class="bi bi-currency-dollar" style="font-size: 1.5vw"></i>
-                  </div>
-                  <div class="ps-2">
-                    <h6>{{ oroVendido | number: '1.0-0'}}K
-                    </h6>
-                    <h5 class="card-title py-0">
-                      <span>~${{usdX100K | number: '1.2-2'}} cada 100K</span>
-                    </h5>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="px-2">
-            <div class="card info-card revenue-card">
-              <div class="card-body">
-                <h2 class="card-title titulo-stats">USD del mes</h2>
-                <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center "
-                    style="height: 3.5vw; width: 3.5vw">
-                    <i class="bi bi-currency-dollar" style="font-size: 1.5vw"></i>
-                  </div>
-                  <div class="ps-2">
-                    <h6>${{ usdConseguidos | number: '1.2-2'}}
-                    </h6>
-                    <!-- <h5 class="card-title py-0">
-                      <span>~${{0 | number: '1.2-2'}}</span>
-                    </h5> -->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+
         </section>
+      </div>
+      <div class="col-2">
+        <div class="card info-card revenue-card">
+          <div class="card-body">
+            <h2 class="card-title titulo-stats">Filtros</h2>
+            <div class="d-flex align-items-center">
+              <div class="ps-2">
+                <section class="example-section" [formGroup]="formTiposMov">
+                  <mat-selection-list>
+                    <p>
+                      <mat-checkbox formControlName="ingreso" (change)="filtrarTipoMov()" color="primary">Ingreso</mat-checkbox>
+                    </p>
+                    <p>
+                      <mat-checkbox formControlName="venta" (change)="filtrarTipoMov()" color="primary">Venta</mat-checkbox>
+                    </p>
+                    <p>
+                      <mat-checkbox formControlName="retiro" (change)="filtrarTipoMov()" color="primary">Retiro</mat-checkbox>
+                    </p>
+                    <p>
+                      <mat-checkbox formControlName="confirm" (change)="filtrarTipoMov()" color="primary">Confirmación</mat-checkbox>
+                    </p>
+                  </mat-selection-list>
+                </section>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
   </section>
 </main>

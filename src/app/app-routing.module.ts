@@ -7,6 +7,7 @@ import { AuthGuard } from './guard/auth.guard';
 import { AjustesComponent } from './components/ajustes/ajustes.component';
 import { LoginGuard } from './guard/login.guard';
 import { HistorialOroComponent } from './components/historial-oro/historial-oro.component';
+import { ResumenComponent } from './components/resumen/resumen.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent, canActivate: [LoginGuard] },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'historial-oro', component: HistorialOroComponent, canActivate: [AuthGuard] },
+  { path: 'resumen', component: ResumenComponent, canActivate: [AuthGuard] },
   { path: 'ajustes', component: AjustesComponent, canActivate: [AuthGuard] },
 ];
 

@@ -1,0 +1,123 @@
+<main id="main" class="main ">
+  <div class="pagetitle">
+    <h1>Resumen diario</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="home">Home</a></li>
+        <li class="breadcrumb-item active">Resumen Diario</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <section class="section">
+    <div class="row">
+      <div class="col-8">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-4">
+                <h5 class="card-title mb-0 py-auto mx-2">
+                  Resumen por día
+                </h5>
+              </div>
+              <div class="col-4 justify-content-center">
+                <h5 class="card-title  mb-0 py-auto mx-2">
+                  {{(date.value?date.value.format('MMMM, YYYY'):'-') | titlecase}}
+                </h5>
+              </div>
+              <div class="col-4 my-auto d-flex justify-content-end">
+                <mat-form-field appearance="outline" class="datapicker">
+                  <input matInput [max]="maxDate" [matDatepicker]="dp" [formControl]="date" [formNoValidate]="true">
+                  <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                  <mat-datepicker #dp startView="multi-year" (monthSelected)="setMonthAndYear($event, dp)"
+                    panelClass="example-month-picker">
+                  </mat-datepicker>
+                </mat-form-field>
+                <div class="example-button-container ps-1">
+                  <button mat-mini-fab color="disabled" (click)="disminuirMes()" style="scale: 0.8">
+                    <mat-icon style="scale: 1.5">keyboard_arrow_left</mat-icon>
+                  </button>
+                </div>
+                <div class="example-button-container pe-2">
+                  <button mat-mini-fab color="disabled" (click)="aumentarMes() " style="scale: 0.8">
+                    <mat-icon style="scale: 1.5">keyboard_arrow_right</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="dataTable-container dataTable-hover">
+              <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tableMovimientos" matSortActive="fecha"
+                matSortDirection="desc" matSort multiTemplateDataRows style="width:100%">
+                <ng-container matColumnDef="fecha">
+                  <th mat-header-cell *matHeaderCellDef class="col-3 text-center borde-derecha"> Fecha </th>
+                  <td mat-cell *matCellDef="let element" ngClass="{{element.cantOro==0 ?'bgcorn':''}}"
+                    class="borde-derecha" style="text-align: center;">
+                    <div class="col-7 align-items-center" style="text-align: right">{{(element.fecha?((element.fecha |
+                      date: 'EEEE dd, MMM') | titlecase):element.texto)}}</div>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="cantOro">
+                  <th mat-header-cell *matHeaderCellDef class="col-2 text-center borde-derecha"> Cantidad de
+                    Oro </th>
+                  <td mat-cell *matCellDef="let element" ngClass="{{element.cantOro==0?'bgcorn':''}}"
+                    class="borde-derecha" style="text-align: center;">
+                    <div class="col-7 align-items-center" style="text-align: right">{{element.cantOro}}K</div>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="cantUsd">
+                  <th mat-header-cell *matHeaderCellDef class="col-2 text-center borde-derecha"> ~$$ </th>
+                  <td mat-cell *matCellDef="let element" ngClass="{{element.cantOro==0?'bgcorn':''}}"
+                    class="borde-derecha" style="text-align: center;">
+                    <div class="col-7 align-items-center" style="text-align: right">${{(element.cantUsd |
+                      number:'1.2-2')}}</div>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr class="tablerow" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title titulo-stats">Oro del mes</h2>
+            <div class="dataTable-container dataTable-hover">
+              <table mat-table [dataSource]="dataSourceSemanal" class="mat-elevation-z8 tableMovimientos" matSortActive="fecha"
+                matSortDirection="desc" matSort multiTemplateDataRows style="width:100%">
+                <ng-container matColumnDef="fecha">
+                  <th mat-header-cell *matHeaderCellDef class="col-3 text-center borde-derecha"> Semana </th>
+                  <td mat-cell *matCellDef="let element" ngClass="{{element.cantOro==0 ?'bgcorn':''}}"
+                    class="borde-derecha" style="text-align: center;">
+                    {{(element.semana)}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="cantOro">
+                  <th mat-header-cell *matHeaderCellDef class="col-2 text-center borde-derecha"> Cantidad de
+                    Oro </th>
+                  <td mat-cell *matCellDef="let element" ngClass="{{element.cantOro==0?'bgcorn':''}}"
+                    class="borde-derecha" style="text-align: center;">
+                    <div class="col-7 align-items-center" style="text-align: right">{{element.cantOro}}K</div>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="cantUsd">
+                  <th mat-header-cell *matHeaderCellDef class="col-2 text-center borde-derecha"> ~$$ </th>
+                  <td mat-cell *matCellDef="let element" ngClass="{{element.cantOro==0?'bgcorn':''}}"
+                    class="borde-derecha" style="text-align: center;">
+                    <div class="col-7 align-items-center" style="text-align: right">${{(element.cantUsd |
+                      number:'1.2-2')}}</div>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr class="tablerow" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
