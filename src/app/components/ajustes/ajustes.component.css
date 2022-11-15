@@ -1,0 +1,8 @@
+td.mat-cell{
+  font-size: 0.9vw;
+}
+
+.borde-derecha{
+  border-right: 0.5px solid;
+  border-color: #e2e2e2;
+}

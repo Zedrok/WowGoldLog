@@ -31,9 +31,9 @@
           <td mat-footer-cell *matFooterCellDef class="t-number borde-derecha"><div class="col-8 align-items-center">{{getSumaPendiente()}}K</div></td>
         </ng-container>
         <ng-container matColumnDef="total">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-3 ps-4"> Total </th>
-          <td mat-cell *matCellDef="let element" class="t-number"><div class="col-8 align-items-center"> {{element.total}}K</div> </td>
-          <td mat-footer-cell *matFooterCellDef class="t-number"><div class="col-8 align-items-center">{{getSumaTotal()}}K</div></td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-3 ps-4  borde-derecha"> Total </th>
+          <td mat-cell *matCellDef="let element" class="t-number  borde-derecha"><div class="col-8 align-items-center"> {{element.total}}K</div> </td>
+          <td mat-footer-cell *matFooterCellDef class="t-number borde-derecha"><div class="col-8 align-items-center">{{getSumaTotal()}}K</div></td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>

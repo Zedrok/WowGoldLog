@@ -14,6 +14,7 @@ td.t-number{
 
 td.mat-cell{
   font-size: 1vw;
+  border-bottom-color: lightgray !important;
 }
 
 td.mat-footer-cell{
