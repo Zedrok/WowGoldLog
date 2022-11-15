@@ -20,12 +20,16 @@ import { UserPrefService } from '../../../services/userpref.service';
 })
 export class AgregarMovimientoForm {
   inventarios: GoldTable[] = [];
+  inventariosActivos: GoldTable[] = [];
+  arrayReinos: string[] = JSON.parse(localStorage.getItem('userData')!).reinos
+    ? JSON.parse(localStorage.getItem('userData')!).reinos
+    : [];
   max = 0;
   modalAbierto = true;
   cargando = false;
   formulario = new FormGroup(
     {
-      reinoSelect: new FormControl( JSON.parse(localStorage.getItem('userData')!).reinos[0], [Validators.required]),
+      reinoSelect: new FormControl( this.arrayReinos[0], [Validators.required]),
       tipomovSelect: new FormControl('ingreso', [Validators.required]),
       estadoSelect: new FormControl('inventario', [Validators.required]),
       tipoventaSelect: new FormControl('trade'),
@@ -55,8 +59,13 @@ export class AgregarMovimientoForm {
           this.goldTableSub = this.goldtableService.cargarGoldTables().subscribe(
             (resultado) => {
               if (resultado != null) {
-                this.goldtableService.cargarNombreReinos(resultado);
                 this.inventarios = resultado;
+                this.agregarTablasFaltantes(this.inventarios);
+                this.goldtableService.cargarNombreReinos(this.inventarios);
+                this.inventariosActivos = this.filtrarTablasUsuario(this.inventarios);
+              } else {
+                this.agregarTablasFaltantes(this.inventarios);
+                this.inventariosActivos = this.filtrarTablasUsuario(this.inventarios);
               }
             }
           )
@@ -73,6 +82,43 @@ export class AgregarMovimientoForm {
         }
       }
     )
+  }
+
+  agregarTablasFaltantes(tablas: GoldTable[]) {
+    this.arrayReinos.forEach((reino) => {
+      if (
+        tablas.filter((tabla) => reino === tabla.reino)
+          .length == 0
+      ) {
+        tablas.push({
+          inventario: 0,
+          pendiente: 0,
+          reino: reino,
+          total: 0,
+        });
+      }
+    });
+  }
+
+  filtrarTablasUsuario(tablas: GoldTable[]) {
+    let datosFiltrados = tablas.filter((tabla) =>
+      this.arrayReinos.some((reino) => reino === tabla.reino)
+    );
+
+    if (datosFiltrados.length == 0) {
+      return [];
+    }
+
+    datosFiltrados.sort((tabla1, tabla2) => {
+      if (tabla1.reino > tabla2.reino) {
+        return 1;
+      }
+      if (tabla1.reino < tabla2.reino) {
+        return -1;
+      }
+      return 0;
+    });
+    return datosFiltrados;
   }
 
   ngOnInit(): void {
@@ -120,7 +166,7 @@ export class AgregarMovimientoForm {
         this.formulario.controls.formUsd.clearValidators()
         this.formulario.controls.tipoventaSelect.clearValidators()
       }
-      let tablaActiva = this.getGoldTable(this.formulario.value.reinoSelect)
+      let tablaActiva = this.getGoldTable(this.formulario.value.reinoSelect!)
       this.formulario.controls.estadoSelect.clearValidators
       this.formulario.controls.formOro.clearValidators()
       this.formulario.controls.formOro.addValidators(Validators.min(1))
@@ -140,7 +186,7 @@ export class AgregarMovimientoForm {
 
   modificarMax() {
     if (this.formulario.controls.tipomovSelect.value != 'ingreso') {
-      let tablaActiva = this.getGoldTable(this.formulario.value.reinoSelect)
+      let tablaActiva = this.getGoldTable(this.formulario.value.reinoSelect!)
       this.formulario.controls.formOro.clearValidators()
       this.formulario.controls.formOro.addValidators(Validators.min(1));
       this.formulario.controls.formOro.addValidators(Validators.required);

@@ -29,7 +29,7 @@
       <mat-form-field appearance="fill">
         <mat-label>Reino</mat-label>
         <mat-select formControlName="reinoSelect" (selectionChange)="modificarMax()">
-          <mat-option *ngFor="let inventario of inventarios; let i = index" value="{{inventario.reino}}">{{inventario.reinoString}}</mat-option>
+          <mat-option *ngFor="let inventario of inventariosActivos; let i = index" value="{{inventario.reino}}">{{inventario.reinoString}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>

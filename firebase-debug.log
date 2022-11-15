@@ -1,0 +1,54 @@
+[debug] [2022-11-14T23:42:13.441Z] ----------------------------------------------------------------------
+[debug] [2022-11-14T23:42:13.442Z] Command:       c:\program files\nodejs\node.exe C:\Users\Administrador\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2022-11-14T23:42:13.443Z] CLI Version:   11.16.0
+[debug] [2022-11-14T23:42:13.443Z] Platform:      win32
+[debug] [2022-11-14T23:42:13.443Z] Node Version:  v16.17.1
+[debug] [2022-11-14T23:42:13.451Z] Time:          Mon Nov 14 2022 20:42:13 GMT-0300 (hora de verano de Chile)
+[debug] [2022-11-14T23:42:13.452Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-11-14T23:42:13.538Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-11-14T23:42:13.539Z] > authorizing via signed-in user (hernanastudillom@gmail.com)
+[debug] [2022-11-14T23:42:13.539Z] [iam] checking project registro-oro-wow for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-11-14T23:42:13.542Z] > refreshing access token with scopes: []
+[debug] [2022-11-14T23:42:13.544Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2022-11-14T23:42:13.544Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2022-11-14T23:42:14.038Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2022-11-14T23:42:14.038Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2022-11-14T23:42:14.050Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/registro-oro-wow:testIamPermissions [none]
+[debug] [2022-11-14T23:42:14.050Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/registro-oro-wow:testIamPermissions x-goog-quota-user=projects/registro-oro-wow
+[debug] [2022-11-14T23:42:14.050Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/registro-oro-wow:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-11-14T23:42:14.941Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/registro-oro-wow:testIamPermissions 200
+[debug] [2022-11-14T23:42:14.941Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/registro-oro-wow:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-11-14T23:42:14.943Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/registro-oro-wow [none]
+[debug] [2022-11-14T23:42:15.353Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/registro-oro-wow 200
+[debug] [2022-11-14T23:42:15.353Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/registro-oro-wow {"projectId":"registro-oro-wow","projectNumber":"174235887858","displayName":"registro-oro-wow","name":"projects/registro-oro-wow","resources":{"hostingSite":"registro-oro-wow","storageBucket":"registro-oro-wow.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_489a30b7-909f-4a16-a4a0-972450992596"}
+[info] 
+[info] === Deploying to 'registro-oro-wow'...
+[info] 
+[info] i  deploying firestore, hosting 
+[info] i  firestore: reading indexes from firestore.indexes.json... 
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2022-11-14T23:42:15.363Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/registro-oro-wow:test [none]
+[debug] [2022-11-14T23:42:15.363Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/registro-oro-wow:test [omitted]
+[debug] [2022-11-14T23:42:16.282Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/registro-oro-wow:test 200
+[debug] [2022-11-14T23:42:16.282Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/registro-oro-wow:test {}
+[info] +  cloud.firestore: rules file firestore.rules compiled successfully 
+[debug] [2022-11-14T23:42:16.285Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/registro-oro-wow/versions [none]
+[debug] [2022-11-14T23:42:16.285Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/registro-oro-wow/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2022-11-14T23:42:17.684Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/registro-oro-wow/versions 200
+[debug] [2022-11-14T23:42:17.684Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/registro-oro-wow/versions {"name":"projects/174235887858/sites/registro-oro-wow/versions/d4c213370fdb105d","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2022-11-14T23:42:17.687Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/registro-oro-wow/releases pageSize=10&pageToken=
+[debug] [2022-11-14T23:42:17.689Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/registro-oro-wow/databases/(default)/collectionGroups/-/indexes [none]
+[debug] [2022-11-14T23:42:18.581Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/registro-oro-wow/releases 200
+[debug] [2022-11-14T23:42:18.581Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/registro-oro-wow/releases {"releases":[{"name":"projects/registro-oro-wow/releases/cloud.firestore","rulesetName":"projects/registro-oro-wow/rulesets/f97872c5-b98a-4970-b5b1-96d01c295d5f","createTime":"2022-11-01T09:34:21.966211Z","updateTime":"2022-11-14T22:38:11.182310Z"}]}
+[debug] [2022-11-14T23:42:18.582Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/registro-oro-wow/rulesets/f97872c5-b98a-4970-b5b1-96d01c295d5f [none]
+[debug] [2022-11-14T23:42:18.746Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/registro-oro-wow/databases/(default)/collectionGroups/-/indexes 200
+[debug] [2022-11-14T23:42:18.746Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/registro-oro-wow/databases/(default)/collectionGroups/-/indexes {"indexes":[{"name":"projects/registro-oro-wow/databases/(default)/collectionGroups/movimientos/indexes/CICAgOjXh4EK","queryScope":"COLLECTION","fields":[{"fieldPath":"uid","order":"ASCENDING"},{"fieldPath":"fecha","order":"DESCENDING"},{"fieldPath":"__name__","order":"DESCENDING"}],"state":"READY"}]}
+[debug] [2022-11-14T23:42:18.746Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/registro-oro-wow/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false [none]
+[debug] [2022-11-14T23:42:19.499Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/registro-oro-wow/rulesets/f97872c5-b98a-4970-b5b1-96d01c295d5f 200
+[debug] [2022-11-14T23:42:19.499Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/registro-oro-wow/rulesets/f97872c5-b98a-4970-b5b1-96d01c295d5f [omitted]
+[info] i  firestore: latest version of firestore.rules already up to date, skipping upload... 
+[debug] [2022-11-14T23:42:19.849Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/registro-oro-wow/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false 200
+[debug] [2022-11-14T23:42:19.849Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/registro-oro-wow/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false {"fields":[{"name":"projects/registro-oro-wow/databases/(default)/collectionGroups/__default__/fields/*","indexConfig":{"indexes":[{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"ASCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"DESCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","arrayConfig":"CONTAINS"}],"state":"READY"}]}}]}
+[info] i  firestore: The following indexes are defined in your project but are not present in your firestore indexes file:
+	(movimientos) -- (uid,ASCENDING) (fecha,DESCENDING)  
