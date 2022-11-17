@@ -56,8 +56,11 @@
                       <i class="bi bi-currency-dollar"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>${{((userPref)?(userPref.usdx100K):0) | number: '1.2-2'}} <span class="card-title text-muted">
-                          (${{((userPref)?(userPref.usdx100K/0.95):0) | number: '1.2-2'}} +5%)</span></h6>
+                      <h6>${{((userPref)?(userPref.usdx100K):0) | number: '1.2-2'}}
+                        <span class="card-title text-muted">
+                          (${{((userPref)?(userPref.usdx100K/0.95):0) | number: '1.2-2'}} +5%)
+                        </span>
+                      </h6>
                     </div>
                   </div>
                 </div>
@@ -80,8 +83,8 @@
                     </div>
                     <div class="ps-1">
                       <h6>{{statInventario.oroDiario| number: '1.0-0'}}K</h6>
-                      <h5 class="card-title py-0">
-                        <span>~${{(statInventario.oroDiario?getValorUSD(statInventario.oroDiario):0) | number:
+                      <h5 class="py-0">
+                        <span class="card-title text-muted">~${{(statInventario.oroDiario?getValorUSD(statInventario.oroDiario):0) | number:
                           '1.2-2'}}</span>
                       </h5>
                       <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
@@ -97,7 +100,7 @@
             <div class="col-4 px-2">
               <div class="card info-card revenue-card">
                 <div class="card-body">
-                  <h2 class="card-title titulo-stats">Promedio diario<span><br>Semana anterior</span></h2>
+                  <h2 class="card-title titulo-stats">Promedio diario<span class="text-muted"><br>Semana anterior</span></h2>
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bi bi-currency-dollar"></i>
@@ -105,8 +108,8 @@
                     <div class="ps-2">
                       <h6>{{(statInventario.oroSemanaAnterior?statInventario.oroSemanaAnterior/7:0) | number: '1.0-0'}}K
                       </h6>
-                      <h5 class="card-title py-0">
-                        <span>~${{(statInventario.oroSemanaAnterior?getValorUSD(statInventario.oroSemanaAnterior/7):0) |
+                      <h5 class="py-0">
+                        <span class="card-title text-muted">~${{(statInventario.oroSemanaAnterior?getValorUSD(statInventario.oroSemanaAnterior/7):0) |
                           number: '1.2-2'}}</span>
                       </h5>
                       <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
@@ -128,8 +131,8 @@
                     </div>
                     <div class="ps-2">
                       <h6>{{statInventario.oroMensual | number: '1.0-0'}}K</h6>
-                      <h5 class="card-title py-0">
-                        <span>~${{(statInventario.oroMensual?getValorUSD(statInventario.oroMensual):0) |
+                      <h5 class="py-0">
+                        <span class="card-title text-muted">~${{(statInventario.oroMensual?getValorUSD(statInventario.oroMensual):0) |
                           number:'1.2-2'}}</span>
                       </h5>
                       <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
@@ -155,8 +158,8 @@
                     </div>
                     <div class="ps-2">
                       <h6>{{(statInventario.oroSemanal?statInventario.oroSemanal:0) | number: '1.0-0'}}K</h6>
-                      <h5 class="card-title py-0">
-                        <span>~${{(statInventario.oroSemanal?getValorUSD(statInventario.oroSemanal):0) | number:
+                      <h5 class="py-0">
+                        <span class="card-title text-muted">~${{(statInventario.oroSemanal?getValorUSD(statInventario.oroSemanal):0) | number:
                           '1.2-2'}}</span>
                       </h5>
                       <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
@@ -171,15 +174,15 @@
             <div class="col-4 px-2">
               <div class="card info-card revenue-card">
                 <div class="card-body">
-                  <h2 class="card-title titulo-stats">Promedio diario<span><br>Esta semana</span></h2>
+                  <h2 class="card-title titulo-stats">Promedio diario<span class="text-muted"><br>Esta semana</span></h2>
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bi bi-currency-dollar"></i>
                     </div>
                     <div class="ps-2">
                       <h6>{{(statInventario.promSemanal?statInventario.promSemanal:0) | number: '1.0-0'}}K</h6>
-                      <h5 class="card-title py-0">
-                        <span>~${{(statInventario.promSemanal?getValorUSD(statInventario.promSemanal):0) | number: '1.2-2'}}</span>
+                      <h5 class="py-0">
+                        <span class="card-title text-muted">~${{(statInventario.promSemanal?getValorUSD(statInventario.promSemanal):0) | number: '1.2-2'}}</span>
                       </h5>
                       <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
                     </div>
@@ -201,7 +204,7 @@
                     </div>
                     <div class="ps-2">
                       <h6>{{getSumaTotal()| number: '1.0-0'}}K</h6>
-                      <h5 class="card-title py-0"><span>~${{getValorUSD(getSumaTotal())| number: '1.2-2'}}</span></h5>
+                      <h5 class="py-0"><span class="card-title text-muted">~${{getValorUSD(getSumaTotal())| number: '1.2-2'}}</span></h5>
 
                     </div>
                   </div>
