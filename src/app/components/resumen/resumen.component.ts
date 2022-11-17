@@ -170,7 +170,7 @@ export class ResumenComponent implements OnInit {
             } else {
               if (movimiento.tipoMov == 'retiro') {
                 totalOro -= movimiento.cantOro;
-                totalUsd -= this.getValorUSD(totalOro);
+                totalUsd -= this.getValorUSD(movimiento.cantOro);
               }
             }
           }
