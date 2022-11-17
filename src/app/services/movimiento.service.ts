@@ -6,6 +6,7 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 import { map, Observable, take, BehaviorSubject } from 'rxjs';
 import { Movimiento } from '../models/movimiento.model';
 import { Reino } from '../models/reino.model';
@@ -33,7 +34,8 @@ export class MovimientoService {
         return cambios.map((accion) => {
           const datos = accion.payload.doc.data() as Movimiento;
           datos.id = accion.payload.doc.id;
-          datos.fecha = ((accion.payload.doc.data().fecha as any).toDate())
+          datos.fecha = ((accion.payload.doc.data().fecha as any).toDate());
+          datos.fechaAjustada = moment(((accion.payload.doc.data().fecha as any).toDate())).subtract(8, 'hours').toDate();
           return datos;
         });
       })

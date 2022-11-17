@@ -7,6 +7,7 @@ export interface Movimiento{
   reino: string,
   reinoString?: string,
   fecha: Date,
+  fechaAjustada: Date,
   eliminable?: boolean,
   fuente?: string,
 }

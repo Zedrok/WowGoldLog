@@ -59,7 +59,7 @@ export interface DataSourceSemanal{
 })
 export class ResumenComponent implements OnInit {
   displayedColumns = ['fecha', 'cantOro', 'cantUsd'];
-  movimientos!: Movimiento[]
+  movimientos!: Movimiento[];
   movimientoSub!: Subscription;
   movimientosFiltradosPorMes: Movimiento[];
   movimientosPorDia: DataSourceResumen[];
@@ -119,7 +119,7 @@ export class ResumenComponent implements OnInit {
           this.movimientoService.cargarMovimientos().subscribe(
             (resultado) => {
               this.movimientos = resultado
-              this.filtrarMovimientos(this.date.value!);
+              this.filtrarMovimientos(this.date.value!.subtract(8 , 'hours'));
               this.dataSource = new MatTableDataSource<DataSourceResumen>(this.movimientosPorDia);
             }
           )
@@ -136,6 +136,7 @@ export class ResumenComponent implements OnInit {
     )
   }
 
+
   ngOnInit(): void {
   }
 
@@ -143,19 +144,22 @@ export class ResumenComponent implements OnInit {
     this.date.clearValidators()
     moment.updateLocale('es', {
       week : {
-          dow : 2,
-          doy : 6
-       }
+        dow : 2,
+        doy: 6,
+      },
     });
     this.date.value!.locale('es')
+    console.log(this.date.value!.locale('es'))
 
-    if (moment(new Date()).get('M') == this.date.value!.get('M')) {
-      this.date.value!.set('date', moment(new Date).get('D'))
+    if (moment(new Date()).subtract(8, 'hours').get('M') == this.date.value!.get('M')) {
+      this.date.value!.set('date', moment(new Date).subtract(8, 'hours').get('D'))
     } else {
       this.date.value!.set('date', this.date.value!.daysInMonth());
     }
 
-    let currentDate = this.date.value!
+    let currentDate = this.date.value!.locale('es')
+    console.log(currentDate)
+
 
     this.movimientosPorDia = [];
     for (let dia = this.date.value!.get('D'); dia > 1; dia--){
@@ -163,7 +167,7 @@ export class ResumenComponent implements OnInit {
       let totalUsd = 0;
       this.movimientosFiltradosPorMes.forEach(
         (movimiento) => {
-          if (moment(movimiento.fecha).get('D') == dia) {
+          if (moment(movimiento.fechaAjustada).locale('es').get('D') == dia) {
             if (movimiento.tipoMov == 'ingreso') {
               totalOro += movimiento.cantOro;
               totalUsd += this.getValorUSD(movimiento.cantOro);
@@ -187,7 +191,7 @@ export class ResumenComponent implements OnInit {
     let totalUsd = 0;
     this.movimientosFiltradosPorMes.forEach(
       (movimiento) => {
-        if (moment(movimiento.fecha).get('D') == 1) {
+        if (moment(movimiento.fechaAjustada).locale('es').get('D') == 1) {
           if (movimiento.tipoMov == 'ingreso') {
             totalOro += movimiento.cantOro;
             totalUsd += this.getValorUSD(movimiento.cantOro);
@@ -205,8 +209,8 @@ export class ResumenComponent implements OnInit {
       cantOro: totalOro,
       cantUsd: totalUsd
     })
-    if (moment(new Date()).get('M') == this.date.value!.get('M')) {
-      this.date.value!.set('date', moment(new Date).get('D'))
+    if (moment(new Date()).subtract(8 , 'hours').get('M') == this.date.value!.get('M')) {
+      this.date.value!.set('date', moment(new Date).subtract(8 , 'hours').get('D'))
     } else {
       this.date.value!.set('date', this.date.value!.daysInMonth());
     }
@@ -230,7 +234,7 @@ export class ResumenComponent implements OnInit {
           )
         }
       } else {
-        if (moment(new Date()).get('M') == this.date.value!.get('M')) {
+        if (moment(new Date()).subtract(8 , 'hours').get('M') == this.date.value!.get('M')) {
           this.movimientosPorSemana.push(
             {
               cantOro: totalSemana,
@@ -267,18 +271,20 @@ export class ResumenComponent implements OnInit {
   }
 
   filtrarMovimientos(fechaFiltrada: moment.Moment) {
+    console.log(this.movimientos)
     this.movimientosFiltradosPorMes = this.movimientos.filter(
       (resultado) => {
-        return moment(resultado.fecha).isSame(fechaFiltrada, 'month') && moment(resultado.fecha).isSame(fechaFiltrada, 'year')
+        return moment(resultado.fechaAjustada).locale('es').isSame(fechaFiltrada, 'month') && moment(resultado.fechaAjustada).locale('es').isSame(fechaFiltrada, 'year')
       }
     )
+    console.log(this.movimientosFiltradosPorMes)
     this.prepararDias();
     this.dataSource = new MatTableDataSource<DataSourceResumen>(this.movimientosPorDia);
   }
 
   aumentarMes() {
-    let currentDate = moment(new Date())
-    if (currentDate.get('M') != this.date.value?.get('M')) {
+    let currentDate = moment(new Date()).subtract(8 , 'hours')
+    if (currentDate.get('M') != this.date.value!.get('M')) {
       this.date.value!.add(1, 'month');
 
       const ctrlValue = this.date.value!;

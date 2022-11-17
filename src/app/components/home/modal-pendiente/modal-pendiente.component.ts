@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Movimiento } from 'src/app/models/movimiento.model';
 import { MovimientoService } from '../../../services/movimiento.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-modal-pendiente',
@@ -77,6 +78,7 @@ export class ModalPendienteComponent implements OnInit {
     this.cargando = true;
     this.goldTable = this.getGoldTable(this.goldTable.reino)
     let indexTable = this.inventarios.indexOf(this.goldTable);
+    let fechaAjustada: Date = moment(new Date()).subtract(8, 'hours').toDate()
 
     let movimiento: Movimiento = {
       uid: JSON.parse(localStorage.getItem('userData')!).uid,
@@ -84,7 +86,8 @@ export class ModalPendienteComponent implements OnInit {
       tipoMov: 'confirm'!,
       reino: this.goldTable.reino!,
       reinoString: this.goldTable.reinoString!,
-      fecha: new Date()
+      fecha: new Date(),
+      fechaAjustada: fechaAjustada
     }
 
     this.goldTable.inventario += this.formOro.value;

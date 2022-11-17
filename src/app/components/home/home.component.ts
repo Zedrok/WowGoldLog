@@ -58,6 +58,7 @@ export class HomeComponent implements OnInit {
       oroMensual: 0,
       oroSemanaAnterior: 0,
       oroSemanal: 0,
+      promSemanal: 0,
       total: 0,
     };
 
@@ -115,9 +116,9 @@ export class HomeComponent implements OnInit {
   }
 
   ActualizarOroMensual(movimientos: Movimiento[]) {
-    let currentDate = moment();
+    let currentDate = moment().locale('es').subtract(8,'hours');
     let filtrados = movimientos.filter((movimiento) => {
-      return moment(movimiento.fecha).isSame(currentDate, 'month');
+      return moment(movimiento.fechaAjustada).isSame(currentDate, 'month');
     })
     let total = 0;
     filtrados.forEach((tabla) => {
@@ -142,8 +143,8 @@ export class HomeComponent implements OnInit {
     });
 
     let filtrados = movimientos.filter((movimiento) => {
-      let currentDate = moment().locale('es');
-      let momentFecha = moment(movimiento.fecha).locale('es')
+      let currentDate = moment().locale('es').subtract(8, 'hours');
+      let momentFecha = moment(movimiento.fechaAjustada).locale('es')
       return momentFecha.isSame(currentDate, 'week');
     })
     let total = 0;
@@ -156,6 +157,14 @@ export class HomeComponent implements OnInit {
         }
       }
     })
+
+    let diaActual = moment(new Date()).subtract(8 , 'hours').locale('es').day()
+    if (diaActual <= 1) {
+      diaActual += 6;
+    } else {
+      diaActual -= 1;
+    }
+    this.statInventario.promSemanal = total / diaActual;
     this.statInventario!.oroSemanal = total;
   }
 
@@ -169,8 +178,8 @@ export class HomeComponent implements OnInit {
     });
 
     let filtrados = movimientos.filter((movimiento) => {
-      let momentFecha = moment(movimiento.fecha).locale('es')
-      let currentDate = moment().locale('es')
+      let momentFecha = moment(movimiento.fechaAjustada).locale('es')
+      let currentDate = moment().locale('es').subtract(8,'hours')
       return momentFecha.isSame(currentDate.subtract(1, 'week'), 'week');
     })
 
@@ -190,9 +199,9 @@ export class HomeComponent implements OnInit {
   }
 
   ActualizarOroDiario(movimientos: Movimiento[]){
-    let currentDate = moment();
+    let currentDate = moment().locale('es').subtract(8,'hours');
     let filtrados = movimientos.filter((movimiento) => {
-      return moment(movimiento.fecha).isSame(currentDate, 'day');
+      return moment(movimiento.fechaAjustada).isSame(currentDate, 'day');
     })
     let total = 0;
     filtrados.forEach((tabla) => {

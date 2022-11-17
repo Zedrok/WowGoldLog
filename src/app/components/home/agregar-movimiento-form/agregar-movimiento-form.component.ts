@@ -12,6 +12,7 @@ import { MovimientoService } from '../../../services/movimiento.service';
 import { StatInventario } from '../../../models/statInventario.model';
 import { UserPref } from 'src/app/models/userpref.model';
 import { UserPrefService } from '../../../services/userpref.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-agregar-movimiento-form',
@@ -215,13 +216,15 @@ export class AgregarMovimientoForm {
     this.cargando = true;
     this.formulario.controls.formOro.markAllAsTouched()
     let fecha: Date = new Date()
+    let fechaAjustada: Date = moment(new Date()).subtract(8, 'hours').toDate()
 
     let movimiento: Movimiento = {
       uid: JSON.parse(localStorage.getItem('userData')!).uid,
       cantOro: this.formulario.value.formOro!,
       tipoMov: this.formulario.value.tipomovSelect!,
       reino: this.formulario.value.reinoSelect!,
-      fecha: fecha
+      fecha: fecha,
+      fechaAjustada: fechaAjustada
     }
 
     let goldTableNueva: GoldTable = this.getGoldTable(movimiento.reino)

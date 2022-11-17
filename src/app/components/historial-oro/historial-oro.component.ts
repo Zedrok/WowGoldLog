@@ -52,6 +52,7 @@ export const MY_FORMATS = {
 export class HistorialOroComponent implements OnInit, AfterViewInit{
   displayedColumns = ['fecha', 'reinoString', 'cantOro', 'cantUsd', 'tipoMov', 'eliminar'];
   movimientos!: Movimiento[]
+  movimientos8horas!: Movimiento[]
   movimientoSub!: Subscription;
   movimientosFiltradosPorMes: Movimiento[];
   movimientosFiltradosPorCheck: Movimiento[];
@@ -113,6 +114,8 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
             (resultado) => {
               this.movimientos = resultado
               this.movimientos[0].eliminable = true;
+              console.log(this.movimientos);
+
               this.filtrarMovimientos(this.date.value!);
               this.filtrarTipoMov();
               this.dataSource = new MatTableDataSource<Movimiento>(this.movimientosFiltradosPorMes);
@@ -173,7 +176,7 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
   filtrarMovimientos(fechaFiltrada: Moment) {
     this.movimientosFiltradosPorMes = this.movimientos.filter(
       (resultado) => {
-        return moment(resultado.fecha).isSame(fechaFiltrada, 'month') && moment(resultado.fecha).isSame(fechaFiltrada, 'year')
+        return moment(resultado.fechaAjustada).locale('es').isSame(fechaFiltrada, 'month') && moment(resultado.fechaAjustada).locale('es').isSame(fechaFiltrada, 'year')
       }
     )
   }
