@@ -67,7 +67,7 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
     ingreso: true,
     venta: true,
     retiro: true,
-    confirm: true,
+    confirm: false,
   });
 
   oroMensual: number;
