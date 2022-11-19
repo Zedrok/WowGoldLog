@@ -117,11 +117,11 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
               console.log(this.movimientos);
 
               this.filtrarMovimientos(this.date.value!);
-              this.filtrarTipoMov();
               this.dataSource = new MatTableDataSource<Movimiento>(this.movimientosFiltradosPorMes);
               this.dataSource.sort = this.sort;
               this.paginator._intl.itemsPerPageLabel = 'Movimientos por página'
               this.dataSource.paginator = this.paginator;
+              this.filtrarTipoMov();
               this.ActualizarMetricas()
             }
           )
@@ -146,12 +146,11 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
       }
     )
 
-
-    // this.movimientos[1].fecha.getTime()
   }
 
   filtrarTipoMov() {
     let tiposMovFiltrados: string[] = [];
+
     this.tiposMov.forEach(
       (tipomov) => {
         if (this.formTiposMov.get(tipomov)!.value == true) {
@@ -160,12 +159,14 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
       }
     )
 
+
     this.movimientosFiltradosPorCheck = this.movimientosFiltradosPorMes.filter((resultado) => {
       let res = tiposMovFiltrados.some((tipomov) => {
         return tipomov == resultado.tipoMov
       })
       return res
     })
+
 
     this.dataSource = new MatTableDataSource<Movimiento>(this.movimientosFiltradosPorCheck);
     this.dataSource.sort = this.sort;
