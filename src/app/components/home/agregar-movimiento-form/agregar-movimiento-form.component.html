@@ -18,7 +18,7 @@
       <p>Oro en movimiento<span *ngIf="formulario.value.tipomovSelect != 'ingreso'" style="font-size: small"> - (maximo: {{max}})</span></p>
       <mat-form-field appearance="fill">
         <mat-label>Cantidad de Oro en K</mat-label>
-        <input type="number" autocomplete="off" onfocus="this.select()" matInput formControlName="formOro">
+        <input type="number" autocomplete="off" onfocus="this.select()" matInput formControlName="formOro" cdkFocusInitial>
       </mat-form-field>
       <mat-error *ngIf="!formulario.controls.formOro.valid && formulario.controls.formOro.touched && formulario.controls.tipomovSelect.value != 'ingreso'">
         Por favor, ingresa un valor válido
@@ -106,7 +106,7 @@
 
   <div mat-dialog-actions>
     <a mat-button (click)="cerrarModal()">Volver</a>
-    <button type="submit" mat-button cdkFocusInitial>Guardar</button>
+    <button type="submit" mat-button>Guardar</button>
   </div>
 </form>
 

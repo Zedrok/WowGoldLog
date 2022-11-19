@@ -6,7 +6,7 @@
         <p><a class="color-primary" (click)="setValorMaximo()" style="cursor: pointer"> (Oro pendiente: {{goldTable.pendiente}}K) - Seleccionar todo</a></p>
         <mat-form-field class="w-100" appearance="fill">
           <mat-label>Cantidad de oro en movimiento</mat-label>
-          <input type="number" autocomplete="off" onfocus="this.select()" matInput [formControl]="formOro" required>
+          <input type="number" autocomplete="off" onfocus="this.select()" matInput [formControl]="formOro" required cdkFocusInitial>
         </mat-form-field>
         <mat-error *ngIf="!formOro.valid && formOro.touched">
           Por favor, ingresa un valor válido
@@ -16,7 +16,7 @@
   </div>
   <div mat-dialog-actions>
     <a mat-button (click)="cerrarModal()">Volver</a>
-    <button mat-button type="submit" cdkFocusInitial> Guardar</button>
+    <button mat-button type="submit"> Guardar</button>
   </div>
 </form>
 

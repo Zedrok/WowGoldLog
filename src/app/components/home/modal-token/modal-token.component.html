@@ -5,7 +5,7 @@
       <div>
         <mat-form-field class="w-100" appearance="fill">
           <mat-label>Valor Token</mat-label>
-          <input type="number" matInput autocomplete="off" onfocus="this.select()" [formControl]="formOro" required>
+          <input type="number" matInput autocomplete="off" onfocus="this.select()" [formControl]="formOro" required cdkFocusInitial>
         </mat-form-field>
         <mat-error *ngIf="!formOro.valid && formOro.touched">
           Por favor, ingresa un valor válido
@@ -15,7 +15,7 @@
   </div>
   <div mat-dialog-actions>
     <a mat-button (click)="cerrarModal()">Volver</a>
-    <button mat-button type="submit" cdkFocusInitial> Guardar</button>
+    <button mat-button type="submit"> Guardar</button>
   </div>
 </form>
 

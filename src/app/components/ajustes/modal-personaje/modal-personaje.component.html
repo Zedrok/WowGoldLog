@@ -5,7 +5,7 @@
       <div>
         <mat-form-field class="w-100" appearance="fill">
           <mat-label>Nombre del personaje</mat-label>
-          <input [required]="false" type="text" autocomplete="off" onfocus="this.select()" matInput [formControl]="formNombre" required>
+          <input [required]="false" type="text" autocomplete="off" onfocus="this.select()" matInput [formControl]="formNombre" required cdkFocusInitial>
         </mat-form-field>
         <mat-error *ngIf="!formNombre.valid && formNombre.touched">
           Por favor, ingresa un valor válido
@@ -15,7 +15,7 @@
   </div>
   <div mat-dialog-actions>
     <a mat-button (click)="cerrarModal()">Volver</a>
-    <button mat-button type="submit" cdkFocusInitial> Guardar</button>
+    <button mat-button type="submit"> Guardar</button>
   </div>
 </form>
 
