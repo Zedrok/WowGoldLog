@@ -32,7 +32,7 @@ export class AgregarMovimientoForm {
     {
       reinoSelect: new FormControl( this.arrayReinos[0], [Validators.required]),
       tipomovSelect: new FormControl('ingreso', [Validators.required]),
-      estadoSelect: new FormControl('inventario', [Validators.required]),
+      estadoSelect: new FormControl('pendiente', [Validators.required]),
       tipoventaSelect: new FormControl('trade'),
       formOro: new FormControl(0, [Validators.required, Validators.min(1)]),
       formUsd : new FormControl(0)
