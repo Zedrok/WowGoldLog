@@ -186,6 +186,25 @@ export class GoldTableComponent implements OnInit {
     return total;
   }
 
+  agregarMovInventario(goldTable: GoldTable) {
+    const dialogRef = this.dialog.open(AgregarMovimientoForm, {
+      width: '600px',
+      data: {
+        tipoMov: 'inventario',
+        reino: goldTable.reino
+      },
+    });
+  }
+
+  agregarMovPendiente(goldTable: GoldTable) {
+    const dialogRef = this.dialog.open(AgregarMovimientoForm, {
+      width: '600px',
+      data: {
+        tipoMov: 'pendiente',
+        reino: goldTable.reino
+      },
+    });
+  }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AgregarMovimientoForm, {

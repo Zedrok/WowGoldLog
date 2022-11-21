@@ -31,7 +31,7 @@ export class AgregarMovimientoForm {
   formulario = new FormGroup(
     {
       reinoSelect: new FormControl( this.arrayReinos[0], [Validators.required]),
-      tipomovSelect: new FormControl('ingreso', [Validators.required]),
+      tipomovSelect: new FormControl('venta', [Validators.required]),
       estadoSelect: new FormControl('pendiente', [Validators.required]),
       tipoventaSelect: new FormControl('trade'),
       formOro: new FormControl(0, [Validators.required, Validators.min(1)]),
@@ -48,10 +48,13 @@ export class AgregarMovimientoForm {
     private loginService: LoginService,
     private _snackBar: MatSnackBar,
     private movService: MovimientoService,
-    private userPrefService: UserPrefService
+    private userPrefService: UserPrefService,
+    @Inject(MAT_DIALOG_DATA) private data?: any
   ) {
-
-
+    if (this.data) {
+      this.formulario.controls.estadoSelect.setValue(this.data.tipoMov);
+      this.formulario.controls.reinoSelect.setValue(this.data.reino);
+    }
     // Activar suscripción a la base de datos de las tablas
     loginService.getLoginStatus().subscribe(
       (status) => {
