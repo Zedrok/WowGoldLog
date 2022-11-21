@@ -32,12 +32,17 @@
         <ng-container matColumnDef="pendiente">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-3 ps-4 borde-derecha"> Pendiente </th>
           <td mat-cell *matCellDef="let element" class="t-number borde-derecha">
-            <div class="col-10 align-items-center d-flex">
-              <div class="col-10 align-items-center text-primary"><a (click)="agregarMovPendiente(element)" style="cursor: pointer"><div> {{element.pendiente}}K </div></a> </div>
+            <div class="col-11 align-items-center d-flex">
+              <div class="col-9 align-items-center text-primary"><a (click)="agregarMovPendiente(element)" style="cursor: pointer"><div> {{element.pendiente}}K </div></a> </div>
+              <div class="col-1"></div>
               <div class="col-2 align-items-center text-success"><a (click)="openModalPendiente(element)" style="cursor: pointer"><div><mat-icon style="vertical-align: sub;">check_circle_outline</mat-icon></div></a></div>
             </div>
           </td>
-          <td mat-footer-cell *matFooterCellDef class="t-number borde-derecha"><div class="col-8 align-items-center">{{getSumaPendiente()}}K</div></td>
+          <td mat-footer-cell *matFooterCellDef class="t-number borde-derecha">
+            <div class="col-11">
+              <div class="col-9 align-items-center">{{getSumaPendiente()}}K</div>
+            </div>
+          </td>
         </ng-container>
         <ng-container matColumnDef="total">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-3 ps-4  borde-derecha"> Total </th>
