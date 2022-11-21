@@ -31,7 +31,7 @@ export class AgregarMovimientoForm {
   formulario = new FormGroup(
     {
       reinoSelect: new FormControl( this.arrayReinos[0], [Validators.required]),
-      tipomovSelect: new FormControl('venta', [Validators.required]),
+      tipomovSelect: new FormControl('ingreso', [Validators.required]),
       estadoSelect: new FormControl('pendiente', [Validators.required]),
       tipoventaSelect: new FormControl('trade'),
       formOro: new FormControl(0, [Validators.required, Validators.min(1)]),
