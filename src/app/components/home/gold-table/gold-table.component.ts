@@ -208,8 +208,7 @@ export class GoldTableComponent implements OnInit {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AgregarMovimientoForm, {
-      width: '600px',
-      data: {},
+      width: '600px'
     });
   }
 
