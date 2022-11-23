@@ -11,6 +11,7 @@
           <mat-option value="ingreso">Ingreso</mat-option>
           <mat-option value="venta">Venta de oro</mat-option>
           <mat-option value="retiro">Retiro</mat-option>
+          <mat-option value="traspaso">Traspaso</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -29,6 +30,15 @@
       <mat-form-field appearance="fill">
         <mat-label>Reino</mat-label>
         <mat-select formControlName="reinoSelect" (selectionChange)="modificarMax()">
+          <mat-option *ngFor="let inventario of inventariosActivos; let i = index" value="{{inventario.reino}}">{{inventario.reinoString}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="row" *ngIf="formulario.value.tipomovSelect == 'traspaso'">
+      <p>Reino Objetivo</p>
+      <mat-form-field appearance="fill">
+        <mat-label>Reino</mat-label>
+        <mat-select formControlName="reinoObjetivoSelect">
           <mat-option *ngFor="let inventario of inventariosActivos; let i = index" value="{{inventario.reino}}">{{inventario.reinoString}}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -102,7 +112,10 @@
         </tbody>
       </table>
     </div>
+    <div class="col-7" *ngIf="formulario.controls.tipomovSelect.value == 'traspaso'"><h4 class="card-title">Oro recibido: {{toFixed((this.formulario.value.formOro!*0.95),0)}} </h4></div>
+
   </div>
+
 
   <div mat-dialog-actions>
     <a mat-button (click)="cerrarModal()">Volver</a>

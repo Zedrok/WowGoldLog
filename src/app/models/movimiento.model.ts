@@ -6,6 +6,8 @@ export interface Movimiento{
   tipoMov: string,
   reino: string,
   reinoString?: string,
+  reinoObjetivo?: string,
+  reinoObjetivoString?: string,
   fecha: Date,
   fechaAjustada: Date,
   eliminable?: boolean,

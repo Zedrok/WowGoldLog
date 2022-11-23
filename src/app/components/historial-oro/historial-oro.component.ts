@@ -62,11 +62,13 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
   date = new FormControl(moment());
   userPref!: UserPref
   userPrefSub!: Subscription;
-  tiposMov: string[] = ['ingreso', 'venta', 'retiro', 'confirm']
+  tiposMov: string[] = ['ingreso', 'venta', 'retiro', 'confirm', 'traspaso']
+  toFixed = (n: number, fixed: number): number => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
   formTiposMov = this._formBuilder.group({
     ingreso: true,
     venta: true,
     retiro: true,
+    traspaso: true,
     confirm: false,
   });
 
@@ -259,9 +261,24 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
           goldTableNueva.inventario += movimiento.cantOro
           goldTableNueva.total += movimiento.cantOro
         } else {
-          // Es una confirmación
-          goldTableNueva.inventario -= movimiento.cantOro
-          goldTableNueva.pendiente += movimiento.cantOro
+          if (movimiento.tipoMov == 'confirm') {
+            // Es una confirmación
+            goldTableNueva.inventario -= movimiento.cantOro
+            goldTableNueva.pendiente += movimiento.cantOro
+          } else {
+            //Es un traspaso
+            let goldTableObjetivo = this.getGoldTable(movimiento.reinoObjetivo!)
+            let indexObjetivo = this.inventarios.indexOf(goldTableObjetivo);
+
+            goldTableNueva.inventario += movimiento.cantOro
+            goldTableNueva.total += movimiento.cantOro
+
+            goldTableObjetivo.inventario -= this.toFixed(movimiento.cantOro * 0.95 , 0)
+            goldTableObjetivo.total -= this.toFixed(movimiento.cantOro * 0.95, 0)
+
+            this.inventarios[indexObjetivo] = goldTableObjetivo;
+
+          }
         }
       }
 

@@ -28,12 +28,15 @@ export class AgregarMovimientoForm {
   max = 0;
   modalAbierto = true;
   cargando = false;
+  oroTransformado = 0;
+  toFixed = (n: number, fixed: number): number => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
   formulario = new FormGroup(
     {
       reinoSelect: new FormControl( this.arrayReinos[0], [Validators.required]),
       tipomovSelect: new FormControl('ingreso', [Validators.required]),
       estadoSelect: new FormControl('pendiente', [Validators.required]),
       tipoventaSelect: new FormControl('trade'),
+      reinoObjetivoSelect: new FormControl( this.arrayReinos[1] ),
       formOro: new FormControl(0, [Validators.required, Validators.min(1)]),
       formUsd : new FormControl(0)
     }
@@ -161,31 +164,44 @@ export class AgregarMovimientoForm {
   }
 
   modificarValidaciones() {
-    if (this.formulario.value.tipomovSelect != 'ingreso') {
-      if (this.formulario.value.tipomovSelect == 'venta') {
+    switch (this.formulario.value.tipomovSelect) {
+      case 'venta':
         this.formulario.controls.formUsd.addValidators(Validators.required)
         this.formulario.controls.formUsd.addValidators(Validators.min(1))
         this.formulario.controls.tipoventaSelect.addValidators(Validators.required)
-      } else {
+        this.agregarValidacionMax();
+        break;
+      case 'retiro':
         this.formulario.controls.formUsd.clearValidators()
         this.formulario.controls.tipoventaSelect.clearValidators()
-      }
-      let tablaActiva = this.getGoldTable(this.formulario.value.reinoSelect!)
-      this.formulario.controls.estadoSelect.clearValidators
-      this.formulario.controls.formOro.clearValidators()
-      this.formulario.controls.formOro.addValidators(Validators.min(1))
-      this.formulario.controls.formOro.addValidators(Validators.max(tablaActiva.inventario))
-      this.max = tablaActiva.inventario
-    } else {
-      this.formulario.controls.tipoventaSelect.clearValidators()
-      this.formulario.controls.formUsd.clearValidators()
-      this.formulario.controls.formOro.clearValidators()
-      this.formulario.controls.estadoSelect.addValidators(Validators.required)
-      this.formulario.controls.formOro.addValidators(Validators.min(1));
-      this.formulario.controls.formOro.addValidators(Validators.required);
+        this.agregarValidacionMax();
+        break;
+      case 'traspaso':
+        this.formulario.controls.formUsd.clearValidators()
+        this.formulario.controls.tipoventaSelect.clearValidators()
+        this.agregarValidacionMax();
+        break;
+      case 'ingreso':
+        this.formulario.controls.tipoventaSelect.clearValidators()
+        this.formulario.controls.formUsd.clearValidators()
+        this.formulario.controls.formOro.clearValidators()
+        this.formulario.controls.estadoSelect.addValidators(Validators.required)
+        this.formulario.controls.formOro.addValidators(Validators.min(1));
+        this.formulario.controls.formOro.addValidators(Validators.required);
+        break;
     }
     this.formulario.markAsDirty()
     this.formulario.controls.formOro.updateValueAndValidity()
+  }
+
+  agregarValidacionMax() {
+    let tablaActiva = this.getGoldTable(this.formulario.value.reinoSelect!)
+    this.formulario.controls.estadoSelect.clearValidators
+    this.formulario.controls.formOro.clearValidators()
+    this.formulario.controls.formOro.addValidators(Validators.min(1))
+    this.formulario.controls.formOro.addValidators(Validators.max(tablaActiva.inventario))
+    this.formulario.controls.formOro.setValue(tablaActiva.inventario)
+    this.max = tablaActiva.inventario
   }
 
   modificarMax() {
@@ -195,12 +211,12 @@ export class AgregarMovimientoForm {
       this.formulario.controls.formOro.addValidators(Validators.min(1));
       this.formulario.controls.formOro.addValidators(Validators.required);
       this.formulario.controls.formOro.addValidators(Validators.max(tablaActiva.inventario))
+      this.formulario.controls.formOro.setValue(tablaActiva.inventario)
       this.max = tablaActiva.inventario
     }
     this.formulario.markAsDirty()
     this.formulario.controls.formOro.updateValueAndValidity()
   }
-
 
   async agregarMovimiento() {
     if (!this.modalAbierto) {
@@ -230,38 +246,64 @@ export class AgregarMovimientoForm {
       fechaAjustada: fechaAjustada
     }
 
-    let goldTableNueva: GoldTable = this.getGoldTable(movimiento.reino)
-    let indexTable = this.inventarios.indexOf(goldTableNueva);
+    let goldTableOrigen: GoldTable = this.getGoldTable(movimiento.reino)
+    let indexTable = this.inventarios.indexOf(goldTableOrigen);
 
-    movimiento.reinoString = goldTableNueva.reinoString
+    movimiento.reinoString = goldTableOrigen.reinoString
 
     switch (movimiento.tipoMov) {
       case 'ingreso': {
         if (this.formulario.value.estadoSelect == 'pendiente') {
-          goldTableNueva.pendiente += movimiento.cantOro
-          goldTableNueva.total += movimiento.cantOro
+          goldTableOrigen.pendiente += movimiento.cantOro
+          goldTableOrigen.total += movimiento.cantOro
           movimiento.fuente = 'pendiente'
         } else {
-          goldTableNueva.inventario += movimiento.cantOro
-          goldTableNueva.total += movimiento.cantOro
+          goldTableOrigen.inventario += movimiento.cantOro
+          goldTableOrigen.total += movimiento.cantOro
           movimiento.fuente = 'inventario'
         }
         break;
       }
       case 'venta': {
-        goldTableNueva.inventario -= movimiento.cantOro
-        goldTableNueva.total -= movimiento.cantOro
+        goldTableOrigen.inventario -= movimiento.cantOro
+        goldTableOrigen.total -= movimiento.cantOro
         movimiento.cantUsd = this.formulario.value.formUsd!
         break;
       }
       case 'retiro': {
-        goldTableNueva.inventario -= movimiento.cantOro
-        goldTableNueva.total -= movimiento.cantOro
+        goldTableOrigen.inventario -= movimiento.cantOro
+        goldTableOrigen.total -= movimiento.cantOro
         break;
+      }
+      case 'traspaso': {
+
+        if (this.formulario.value.reinoSelect == this.formulario.value.reinoObjetivoSelect) {
+          this._snackBar.open('Por favor revisa los datos', 'OK', {
+            panelClass: 'snackbar-error',
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          });
+          return;
+        }
+
+        let goldTableObjetivo = this.getGoldTable(this.formulario.value.reinoObjetivoSelect!)
+        let indexObjetivo = this.inventarios.indexOf(goldTableObjetivo);
+
+        goldTableOrigen.inventario -= this.formulario.value.formOro!
+        goldTableOrigen.total -= this.formulario.value.formOro!
+
+        goldTableObjetivo.inventario += this.toFixed(this.formulario.value.formOro! * 0.95, 0);
+        goldTableObjetivo.total += this.toFixed(this.formulario.value.formOro! * 0.95, 0);
+
+        movimiento.reinoObjetivo = goldTableObjetivo.reino
+        movimiento.reinoObjetivoString = goldTableObjetivo.reinoString
+
+        this.inventarios[indexObjetivo] = goldTableObjetivo;
       }
     }
 
-    this.inventarios[indexTable] = goldTableNueva;
+    this.inventarios[indexTable] = goldTableOrigen;
 
     this.goldtableService.guardarTablas(this.inventarios);
     if (await this.movService.guardarMovimiento(movimiento)) {

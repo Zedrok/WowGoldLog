@@ -72,10 +72,30 @@
                 <ng-container matColumnDef="tipoMov">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-2 ps-3 borde-derecha"> Tipo </th>
                   <td mat-cell *matCellDef="let element" class="borde-derecha" style="text-align: center;">
-                    <div *ngIf="(element.tipoMov == 'ingreso'); else elseIngreso">
-                      <div class="badge bg-success" style="min-width: 112px">
-                        <mat-icon>check_circle_outline</mat-icon>
-                        <span> {{element.tipoMov | titlecase}}</span>
+                    <div [ngSwitch]="element.tipoMov">
+                      <div *ngSwitchCase="'ingreso'">
+                        <div class="badge bg-success" style="min-width: 112px">
+                          <mat-icon>check_circle_outline</mat-icon>
+                          <span> {{element.tipoMov | titlecase}}</span>
+                        </div>
+                      </div>
+                      <div *ngSwitchCase="'venta'">
+                        <div class="badge bg-primary" style="min-width: 112px">
+                          <mat-icon>attach_money</mat-icon>
+                          <span> {{element.tipoMov | titlecase}}</span>
+                        </div>
+                      </div>
+                      <div *ngSwitchCase="'retiro'">
+                        <div class="badge bg-danger" style="min-width: 112px">
+                          <mat-icon>remove_circle_outline</mat-icon>
+                          <span> {{element.tipoMov | titlecase}}</span>
+                        </div>
+                      </div>
+                      <div *ngSwitchCase="'traspaso'">
+                        <div class="badge bg-dark" style="min-width: 112px">
+                          <mat-icon>cached</mat-icon>
+                          <span> {{element.tipoMov | titlecase}}</span>
+                        </div>
                       </div>
                     </div>
                     <ng-template #elseIngreso>
@@ -204,6 +224,9 @@
                     </p>
                     <p>
                       <mat-checkbox formControlName="retiro" (change)="filtrarTipoMov()" color="primary">Retiro</mat-checkbox>
+                    </p>
+                    <p>
+                      <mat-checkbox formControlName="traspaso" (change)="filtrarTipoMov()" color="primary">Traspaso</mat-checkbox>
                     </p>
                     <p>
                       <mat-checkbox formControlName="confirm" (change)="filtrarTipoMov()" color="primary">Confirmación</mat-checkbox>
