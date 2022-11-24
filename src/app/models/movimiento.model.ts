@@ -8,6 +8,7 @@ export interface Movimiento{
   reinoString?: string,
   reinoObjetivo?: string,
   reinoObjetivoString?: string,
+  tipoVenta?: string,
   fecha: Date,
   fechaAjustada: Date,
   eliminable?: boolean,

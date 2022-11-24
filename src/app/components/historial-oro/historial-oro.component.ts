@@ -273,11 +273,15 @@ export class HistorialOroComponent implements OnInit, AfterViewInit{
             goldTableNueva.inventario += movimiento.cantOro
             goldTableNueva.total += movimiento.cantOro
 
-            goldTableObjetivo.inventario -= this.toFixed(movimiento.cantOro * 0.95 , 0)
-            goldTableObjetivo.total -= this.toFixed(movimiento.cantOro * 0.95, 0)
+            if (movimiento.tipoVenta! == 'subasta') {
+              goldTableObjetivo.inventario -= this.toFixed(movimiento.cantOro * 0.95 , 0)
+              goldTableObjetivo.total -= this.toFixed(movimiento.cantOro * 0.95, 0)
+            } else {
+              goldTableObjetivo.inventario -= movimiento.cantOro
+              goldTableObjetivo.total -= movimiento.cantOro
+            }
 
             this.inventarios[indexObjetivo] = goldTableObjetivo;
-
           }
         }
       }

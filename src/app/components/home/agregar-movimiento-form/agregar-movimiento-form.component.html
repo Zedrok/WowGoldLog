@@ -19,7 +19,7 @@
       <p>Oro en movimiento<span *ngIf="formulario.value.tipomovSelect != 'ingreso'" style="font-size: small"> - (maximo: {{max}})</span></p>
       <mat-form-field appearance="fill">
         <mat-label>Cantidad de Oro en K</mat-label>
-        <input type="number" autocomplete="off" onfocus="this.select()" matInput formControlName="formOro" cdkFocusInitial>
+        <input type="number" autocomplete="off" onfocus="this.select()" matInput formControlName="formOro" cdkFocusInitial required>
       </mat-form-field>
       <mat-error *ngIf="!formulario.controls.formOro.valid && formulario.controls.formOro.touched && formulario.controls.tipomovSelect.value != 'ingreso'">
         Por favor, ingresa un valor válido
@@ -57,13 +57,13 @@
       <p>Cantidad de USD recibida</p>
       <mat-form-field appearance="fill">
         <mat-label>USD recibidos</mat-label>
-        <input type="number" autocomplete="off" onfocus="this.select()" matInput formControlName="formUsd">
+        <input type="number" autocomplete="off" onfocus="this.select()" matInput formControlName="formUsd" required>
       </mat-form-field>
     </div>
-    <div class="row" *ngIf="formulario.controls.tipomovSelect.value == 'venta'">
-      <p>Tipo de venta</p>
+    <div class="row" *ngIf="formulario.controls.tipomovSelect.value == 'venta' || formulario.controls.tipomovSelect.value == 'traspaso'">
+      <p>Método</p>
       <mat-form-field appearance="fill">
-        <mat-label>Tipo de venta</mat-label>
+        <mat-label>Método</mat-label>
         <mat-select formControlName="tipoventaSelect">
           <mat-option value="trade">Trade</mat-option>
           <mat-option value="subasta">Subasta</mat-option>
@@ -112,7 +112,7 @@
         </tbody>
       </table>
     </div>
-    <div class="col-7" *ngIf="formulario.controls.tipomovSelect.value == 'traspaso'"><h4 class="card-title">Oro recibido: {{toFixed((this.formulario.value.formOro!*0.95),0)}} </h4></div>
+    <div class="col-7" *ngIf="formulario.controls.tipomovSelect.value == 'traspaso' && formulario.controls.tipoventaSelect.value == 'subasta'"><h4 class="card-title  pt-0">Oro recibido: {{toFixed((this.formulario.value.formOro!*0.95),0)}} </h4></div>
 
   </div>
 

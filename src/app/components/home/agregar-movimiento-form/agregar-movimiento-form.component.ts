@@ -32,11 +32,11 @@ export class AgregarMovimientoForm {
   toFixed = (n: number, fixed: number): number => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed);
   formulario = new FormGroup(
     {
-      reinoSelect: new FormControl( this.arrayReinos[0], [Validators.required]),
-      tipomovSelect: new FormControl('ingreso', [Validators.required]),
-      estadoSelect: new FormControl('pendiente', [Validators.required]),
+      reinoSelect: new FormControl(this.arrayReinos[0]),
+      tipomovSelect: new FormControl('ingreso'),
+      estadoSelect: new FormControl('pendiente'),
       tipoventaSelect: new FormControl('trade'),
-      reinoObjetivoSelect: new FormControl( this.arrayReinos[1] ),
+      reinoObjetivoSelect: new FormControl(this.arrayReinos[1]),
       formOro: new FormControl(0, [Validators.required, Validators.min(1)]),
       formUsd : new FormControl(0)
     }
@@ -164,42 +164,34 @@ export class AgregarMovimientoForm {
   }
 
   modificarValidaciones() {
+    this.limpiarValidaciones()
     switch (this.formulario.value.tipomovSelect) {
       case 'venta':
         this.formulario.controls.formUsd.addValidators(Validators.required)
         this.formulario.controls.formUsd.addValidators(Validators.min(1))
-        this.formulario.controls.tipoventaSelect.addValidators(Validators.required)
         this.agregarValidacionMax();
         break;
       case 'retiro':
-        this.formulario.controls.formUsd.clearValidators()
-        this.formulario.controls.tipoventaSelect.clearValidators()
         this.agregarValidacionMax();
         break;
       case 'traspaso':
-        this.formulario.controls.formUsd.clearValidators()
-        this.formulario.controls.tipoventaSelect.clearValidators()
         this.agregarValidacionMax();
-        break;
-      case 'ingreso':
-        this.formulario.controls.tipoventaSelect.clearValidators()
-        this.formulario.controls.formUsd.clearValidators()
-        this.formulario.controls.formOro.clearValidators()
-        this.formulario.controls.estadoSelect.addValidators(Validators.required)
-        this.formulario.controls.formOro.addValidators(Validators.min(1));
-        this.formulario.controls.formOro.addValidators(Validators.required);
         break;
     }
     this.formulario.markAsDirty()
     this.formulario.controls.formOro.updateValueAndValidity()
   }
 
+  limpiarValidaciones() {
+    this.formulario.controls.formOro.clearValidators()
+    this.formulario.controls.formUsd.clearValidators()
+    this.formulario.controls.formOro.addValidators([Validators.min(1), Validators.required])
+  }
+
   agregarValidacionMax() {
     let tablaActiva = this.getGoldTable(this.formulario.value.reinoSelect!)
-    this.formulario.controls.estadoSelect.clearValidators
     this.formulario.controls.formOro.clearValidators()
-    this.formulario.controls.formOro.addValidators(Validators.min(1))
-    this.formulario.controls.formOro.addValidators(Validators.max(tablaActiva.inventario))
+    this.formulario.controls.formOro.addValidators([Validators.min(1), Validators.max(tablaActiva.inventario), Validators.required])
     this.formulario.controls.formOro.setValue(tablaActiva.inventario)
     this.max = tablaActiva.inventario
   }
@@ -241,6 +233,7 @@ export class AgregarMovimientoForm {
       uid: JSON.parse(localStorage.getItem('userData')!).uid,
       cantOro: this.formulario.value.formOro!,
       tipoMov: this.formulario.value.tipomovSelect!,
+      tipoVenta: this.formulario.value.tipoventaSelect!,
       reino: this.formulario.value.reinoSelect!,
       fecha: fecha,
       fechaAjustada: fechaAjustada
@@ -289,12 +282,15 @@ export class AgregarMovimientoForm {
 
         let goldTableObjetivo = this.getGoldTable(this.formulario.value.reinoObjetivoSelect!)
         let indexObjetivo = this.inventarios.indexOf(goldTableObjetivo);
-
         goldTableOrigen.inventario -= this.formulario.value.formOro!
         goldTableOrigen.total -= this.formulario.value.formOro!
-
-        goldTableObjetivo.inventario += this.toFixed(this.formulario.value.formOro! * 0.95, 0);
-        goldTableObjetivo.total += this.toFixed(this.formulario.value.formOro! * 0.95, 0);
+        if (movimiento.tipoVenta == 'subasta') {
+          goldTableObjetivo.inventario += this.toFixed(this.formulario.value.formOro! * 0.95, 0);
+          goldTableObjetivo.total += this.toFixed(this.formulario.value.formOro! * 0.95, 0);
+        } else {
+          goldTableObjetivo.inventario += this.formulario.value.formOro!
+          goldTableObjetivo.total += this.formulario.value.formOro!
+        }
 
         movimiento.reinoObjetivo = goldTableObjetivo.reino
         movimiento.reinoObjetivoString = goldTableObjetivo.reinoString
